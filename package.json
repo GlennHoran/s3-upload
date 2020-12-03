@@ -1,0 +1,19 @@
+{
+  "name": "s3-upload",
+  "version": "1.0.0",
+  "description": "Full stack s3 upload",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GlennHoran/s3-upload.git"
+  },
+  "author": "Glenn Horan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GlennHoran/s3-upload/issues"
+  },
+  "homepage": "https://github.com/GlennHoran/s3-upload#readme"
+}
