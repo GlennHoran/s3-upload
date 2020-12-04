@@ -37,4 +37,4 @@ jobs:
 
     - name: Copy files to the test website with the AWS CLI
       run: |
-        aws s3 sync photo-upload-website/dist https://s3.console.aws.amazon.com/s3/buckets/cdkstack-ghoranwebsitephotoupload5b64b471-1qnrhldz7pmqc?region=us-east-1
+        aws s3 sync ./photo-upload-website/dist https://s3.console.aws.amazon.com/s3/buckets/cdkstack-ghoranwebsitephotoupload5b64b471-1qnrhldz7pmqc?region=us-east-1
