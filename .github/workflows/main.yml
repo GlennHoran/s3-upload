@@ -18,25 +18,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: print
-      run: ls
-    - name: Setup node - install & build repo
-      uses: actions/setup-node@v2.1.2
-      with:
-        node-version: 14.14.0
-    - run: npm install
-    - run: cd photo-upload-website && npm run build
-    - name: print
-      run: cd photo-upload-website && ls
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_KEY }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET }}
-        aws-region: us-east-1
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: print
+        run: ls
+      - name: Setup node - install & build repo
+        uses: actions/setup-node@v2.1.2
+        with:
+          node-version: 14.14.0
+      - run: npm install
+      - run: cd photo-upload-website && npm run build
+      - name: print
+        run: cd photo-upload-website && ls
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET }}
+          aws-region: us-east-1
 
-    - name: Copy files to the test website with the AWS CLI
-      run: |
-        aws s3 sync /photo-upload-website/dist s3://cdkstack-ghoranwebsitephotoupload5b64b471-1qnrhldz7pmqc
+      - name: Copy files to the test website with the AWS CLI
+        run: |
+          aws s3 sync photo-upload-website/dist s3://cdkstack-ghoranwebsitephotoupload5b64b471-1qnrhldz7pmqc
