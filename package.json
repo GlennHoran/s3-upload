@@ -4,7 +4,9 @@
   "description": "Full stack s3 upload",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cd cdk && npm run test",
+    "deploy-cdk": "cd cdk && npm run deploy",
+    "deploy-website": "cd photo-upload-website"
   },
   "repository": {
     "type": "git",

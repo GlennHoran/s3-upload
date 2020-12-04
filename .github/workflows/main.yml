@@ -20,16 +20,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: print
-        run: ls
-      - name: Setup node - install & build repo
+
+      - name: Setup node
         uses: actions/setup-node@v2.1.2
         with:
           node-version: 14.14.0
-      - run: npm install
-      - run: cd photo-upload-website && npm run build
-      - name: print
-        run: cd photo-upload-website && ls
+
+      - name: Run npm install & build website
+        run: |
+          npm install
+          cd photo-upload-website && npm run build
+          cd ..
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -38,5 +40,10 @@ jobs:
           aws-region: us-east-1
 
       - name: Copy files to the test website with the AWS CLI
+        run: aws s3 sync photo-upload-website/dist s3://cdkstack-ghoranwebsitephotoupload5b64b471-1qnrhldz7pmqc
+
+      - name: CDK Deploy
         run: |
-          aws s3 sync photo-upload-website/dist s3://cdkstack-ghoranwebsitephotoupload5b64b471-1qnrhldz7pmqc
+          cd cdk
+          npm install
+          npm run deploy
