@@ -27,7 +27,7 @@ jobs:
       with:
         node-version: 14.14.0
     - run: npm install
-    - run: cd photo-upload-website && npm build
+    - run: cd photo-upload-website && npm run build
     - name: print
       run: cd photo-upload-website && ls
     - name: Configure AWS credentials
