@@ -32,8 +32,8 @@ export class CdkStack extends cdk.Stack {
         const getSignedUrlLambda = new Function(this, 'signed-url-lambda', {
                 runtime: Runtime.NODEJS_12_X,
                 //point the lambda function to the functions folder
-                code: Code.fromAsset('./functions'),
-                //the file is getSignedUrls, the function is handler.
+                code: Code.fromAsset('functions'),
+                //the file is getSignedUrls and it's the default export.
                 handler: 'getSignedUrl.default',
                 tracing: Tracing.ACTIVE
             }
