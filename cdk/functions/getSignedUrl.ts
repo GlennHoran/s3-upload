@@ -1,23 +1,42 @@
 import * as AWS from 'aws-sdk'
 
+const handler = async function(event:any) {
+    console.log("request:", JSON.stringify(event, undefined, 2));
 
-const BUCKET = process.env['BUCKET'];
-const AWS_ACCESS_KEY_ID = process.env['AWS_ACCESS_KEY_ID'];
-const AWS_SECRET_ACCESS_KEY = process.env['AWS_SECRET_ACCESS_KEY'];
+    return sendRes(200, 'You have connected with the Lambda!');
+};
 
-const signedUrlExpiresSeconds = 60*10;
+const sendRes = (status:number, body:string) => {
+    var response = {
+        statusCode: status,
+        headers: {
+            "Content-Type": "text/html"
+        },
+        body: body
+    };
+    return response;
+};
 
-AWS.config.update({
-    accessKeyId: AWS_ACCESS_KEY_ID,
-    secretAccessKey: AWS_SECRET_ACCESS_KEY,
-    region: 'eu-west-2'
-});
+export default handler;
 
-const s3 = new AWS.S3({ apiVersion: "2006-03-01" })
+// const BUCKET = process.env['BUCKET'];
+// const AWS_ACCESS_KEY_ID = process.env['AWS_ACCESS_KEY_ID'];
+// const AWS_SECRET_ACCESS_KEY = process.env['AWS_SECRET_ACCESS_KEY'];
+//
+// const signedUrlExpiresSeconds = 60 * 10;
+//
+// AWS.config.update({
+//     accessKeyId: AWS_ACCESS_KEY_ID,
+//     secretAccessKey: AWS_SECRET_ACCESS_KEY,
+//     region: 'eu-west-2'
+// });
+//
+// const s3 = new AWS.S3({apiVersion: "2006-03-01"})
+//
+// interface EventData {
+//     fileName: string
+// }
 
-interface EventData {
-    fileName: string
-}
 // todo write lambda function
 // export default async (event: FunctionEvent<EventData>) => {
 //
@@ -44,3 +63,4 @@ interface EventData {
 //         return { error: 'An unexpected error occured during password change.' }
 //     }
 // }
+

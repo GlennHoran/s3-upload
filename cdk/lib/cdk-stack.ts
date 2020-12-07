@@ -1,6 +1,6 @@
 import * as cdk from '@aws-cdk/core';
 import * as s3 from '@aws-cdk/aws-s3';
-import {Code, Function, Runtime, Tracing} from '@aws-cdk/aws-lambda';
+import * as Function from '@aws-cdk/aws-lambda';
 import {LambdaRestApi} from '@aws-cdk/aws-apigateway';
 
 
@@ -10,6 +10,7 @@ export class CdkStack extends cdk.Stack {
 
         const storageBucket = new s3.Bucket(this, 'photo-storage', {
             versioned: true,
+            //might need cors.
             // cors: [
             //     {
             //         maxAge: 3000,
@@ -28,11 +29,13 @@ export class CdkStack extends cdk.Stack {
             publicReadAccess: true,
         });
 
-        const getSignedUrlLambda = new Function(this, 'signed-url-lambda', {
-                runtime: Runtime.NODEJS_12_X,
-                code: Code.fromAsset('./dist/functions/add-claim'),
-                handler: 'handler.default',
-                tracing: Tracing.ACTIVE
+        const getSignedUrlLambda = new Function.Function(this, 'signed-url-lambda', {
+                runtime: Function.Runtime.NODEJS_12_X,
+                //point the lambda function to the functions folder
+                code: Function.Code.fromAsset('./functions'),
+                //the file is getSignedUrls, the function is handler.
+                handler: 'getSignedUrl.default',
+                tracing: Function.Tracing.ACTIVE
             }
         );
 
@@ -44,11 +47,8 @@ export class CdkStack extends cdk.Stack {
 
         //need to allow the lambda to read/write from the website. The lambda generates the
         // presigned URL so needs read/write permission
-
+        // @ts-ignore
         websiteBucket.grantReadWrite(getSignedUrlLambda)
-
-
-
     }
 }
 
