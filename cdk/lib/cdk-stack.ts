@@ -1,6 +1,6 @@
 import * as cdk from '@aws-cdk/core';
 import * as s3 from '@aws-cdk/aws-s3';
-import * as Function from '@aws-cdk/aws-lambda';
+import {Code, Function, Runtime, Tracing} from '@aws-cdk/aws-lambda';
 import {LambdaRestApi} from '@aws-cdk/aws-apigateway';
 
 
@@ -29,13 +29,13 @@ export class CdkStack extends cdk.Stack {
             publicReadAccess: true,
         });
 
-        const getSignedUrlLambda = new Function.Function(this, 'signed-url-lambda', {
-                runtime: Function.Runtime.NODEJS_12_X,
+        const getSignedUrlLambda = new Function(this, 'signed-url-lambda', {
+                runtime: Runtime.NODEJS_12_X,
                 //point the lambda function to the functions folder
-                code: Function.Code.fromAsset('./functions'),
+                code: Code.fromAsset('./functions'),
                 //the file is getSignedUrls, the function is handler.
                 handler: 'getSignedUrl.default',
-                tracing: Function.Tracing.ACTIVE
+                tracing: Tracing.ACTIVE
             }
         );
 
