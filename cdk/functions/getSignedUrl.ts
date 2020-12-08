@@ -2,7 +2,6 @@ import * as AWS from 'aws-sdk'
 
 const handler = async function(event:any) {
     console.log("request:", JSON.stringify(event, undefined, 2));
-
     return sendRes(200, event.body);
 };
 
