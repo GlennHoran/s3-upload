@@ -48,6 +48,4 @@ jobs:
         run: |
           cd cdk
           npm install
-#          here I'm populating the npm_config_BUCKET variable from github actions secrets and using it in my stack to
-#          set it as an environment variable for my lambda function.
           npm run deploy --BUCKET=${{ secrets.BUCKET_ADDRESS }}
