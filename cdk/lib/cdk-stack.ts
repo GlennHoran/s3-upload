@@ -45,6 +45,10 @@ export class CdkStack extends cdk.Stack {
                 environment: {
                     // @ts-ignore
                     'BUCKET_NAME': process.env.npm_config_BUCKET_NAME,
+                    // @ts-ignore
+                    'KEY': process.env.npm_config_KEY,
+                    // @ts-ignore
+                    'SECRET': process.env.npm_config_KEY
                 }
             }
         );

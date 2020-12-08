@@ -2,8 +2,8 @@ import * as AWS from 'aws-sdk'
 
 const handler = async function(event:any) {
     const BUCKET_NAME = process.env['BUCKET_NAME'];
-    const AWS_ACCESS_KEY_ID = process.env['AWS_ACCESS_KEY_ID'];
-    const AWS_SECRET_ACCESS_KEY = process.env['AWS_SECRET_ACCESS_KEY'];
+    const AWS_ACCESS_KEY_ID = process.env['KEY'];
+    const AWS_SECRET_ACCESS_KEY = process.env['SECRET'];
 
     const signedUrlExpiresSeconds = 60 * 5;
 
