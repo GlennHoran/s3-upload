@@ -8,6 +8,10 @@ import {CfnParameter} from "@aws-cdk/core";
 export class CdkStack extends cdk.Stack {
     constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
         super(scope, id, props);
+        console.log("log1: ", process.env.npm_config_BUCKET)
+        console.log("log2: ",  process.env['BUCKET'])
+        console.log("log3: ", process.env)
+
 
         const storageBucket = new s3.Bucket(this, 'photo-storage', {
             versioned: true,
@@ -30,10 +34,6 @@ export class CdkStack extends cdk.Stack {
             publicReadAccess: true,
         });
 
-        const bucketNameFromGithubActions = new CfnParameter(this, "bucketName", {
-            type: "String",
-            description: "The name of the Amazon S3 bucket where uploaded files will be stored."});
-
         const getSignedUrlLambda = new Function(this, 'signed-url-lambda', {
                 runtime: Runtime.NODEJS_12_X,
                 //point the lambda function to the functions folder
@@ -42,7 +42,8 @@ export class CdkStack extends cdk.Stack {
                 handler: 'getSignedUrl.default',
                 tracing: Tracing.ACTIVE,
                 environment: {
-                    'BUCKET': bucketNameFromGithubActions.valueAsString
+                    // @ts-ignore
+                    'BUCKET': process.env.npm_config_BUCKET,
                 }
             }
         );

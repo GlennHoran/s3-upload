@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/GlennHoran/s3-upload/issues"
   },
-  "homepage": "https://github.com/GlennHoran/s3-upload#readme"
+  "homepage": "https://github.com/GlennHoran/s3-upload#readme",
+  "dependencies": {
+    "aws-cdk": "^1.77.0"
+  }
 }
