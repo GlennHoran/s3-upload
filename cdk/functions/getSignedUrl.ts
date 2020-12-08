@@ -10,7 +10,7 @@ const handler = async function(event:any) {
     AWS.config.update({
         accessKeyId: AWS_ACCESS_KEY_ID,
         secretAccessKey: AWS_SECRET_ACCESS_KEY,
-        // region: 'eu-west-2'
+        region: 'us-east-1'
     });
 
     const s3 = new AWS.S3({apiVersion: "2006-03-01"})
