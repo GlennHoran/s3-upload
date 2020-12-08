@@ -17,9 +17,8 @@ const handler = async function(event:any) {
     // JSON.stringify(event, undefined, 2)
     console.log(`bucket: ${BUCKET}, accessId: ${AWS_ACCESS_KEY_ID}, fileName: ${event.body.toString()}`);
     try {
-        const { fileName } = event.body;
         // Pre-signing a putObject (asynchronously)
-        const params = { Bucket: BUCKET, Key: fileName.toString(), Expires: signedUrlExpiresSeconds }
+        const params = { Bucket: BUCKET, Key: event.body.toString(), Expires: signedUrlExpiresSeconds }
         const uploadUrl: string = await s3.getSignedUrl('putObject', params)
 
         if (!uploadUrl) {
