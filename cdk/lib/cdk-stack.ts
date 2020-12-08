@@ -44,7 +44,7 @@ export class CdkStack extends cdk.Stack {
                 //this environment variable comes from the npm deploy script being run with npm_config_BUCKET being passed in.
                 environment: {
                     // @ts-ignore
-                    'BUCKET': process.env.npm_config_BUCKET,
+                    'BUCKET_NAME': process.env.npm_config_BUCKET_NAME,
                 }
             }
         );

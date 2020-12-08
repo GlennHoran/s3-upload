@@ -1,7 +1,7 @@
 import * as AWS from 'aws-sdk'
 
 const handler = async function(event:any) {
-    const BUCKET = process.env['BUCKET'];
+    const BUCKET_NAME = process.env['BUCKET_NAME'];
     const AWS_ACCESS_KEY_ID = process.env['AWS_ACCESS_KEY_ID'];
     const AWS_SECRET_ACCESS_KEY = process.env['AWS_SECRET_ACCESS_KEY'];
 
@@ -15,15 +15,16 @@ const handler = async function(event:any) {
 
     const s3 = new AWS.S3({apiVersion: "2006-03-01"})
     // JSON.stringify(event, undefined, 2)
-    console.log(`bucket: ${BUCKET}, accessId: ${AWS_ACCESS_KEY_ID}, fileName: ${event.body.toString()}`);
+    console.log(`bucket: ${BUCKET_NAME}, accessId: ${AWS_ACCESS_KEY_ID}, fileName: ${event.body.toString()}`);
     try {
         // Pre-signing a putObject (asynchronously)
-        const params = { Bucket: BUCKET, Key: event.body.toString(), Expires: signedUrlExpiresSeconds }
+        const params = { Bucket: BUCKET_NAME, Key: event.body.toString(), Expires: signedUrlExpiresSeconds }
         const uploadUrl: string = await s3.getSignedUrl('putObject', params)
 
         if (!uploadUrl) {
             return { error: 'Unable to get presigned upload URL from S3' }
         }
+
         return sendRes(200, `URL = ${uploadUrl}`);
     } catch (e) {
         console.log(e)
