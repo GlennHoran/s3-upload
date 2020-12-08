@@ -2,6 +2,7 @@ import * as cdk from '@aws-cdk/core';
 import * as s3 from '@aws-cdk/aws-s3';
 import {Code, Function, Runtime, Tracing} from '@aws-cdk/aws-lambda';
 import {LambdaRestApi} from '@aws-cdk/aws-apigateway';
+import {CfnParameter} from "@aws-cdk/core";
 
 
 export class CdkStack extends cdk.Stack {
@@ -29,13 +30,20 @@ export class CdkStack extends cdk.Stack {
             publicReadAccess: true,
         });
 
+        const bucketNameFromGithubActions = new CfnParameter(this, "bucketName", {
+            type: "String",
+            description: "The name of the Amazon S3 bucket where uploaded files will be stored."});
+
         const getSignedUrlLambda = new Function(this, 'signed-url-lambda', {
                 runtime: Runtime.NODEJS_12_X,
                 //point the lambda function to the functions folder
                 code: Code.fromAsset('functions'),
                 //the file is getSignedUrls and it's the default export.
                 handler: 'getSignedUrl.default',
-                tracing: Tracing.ACTIVE
+                tracing: Tracing.ACTIVE,
+                environment: {
+                    'BUCKET': bucketNameFromGithubActions.valueAsString
+                }
             }
         );
 

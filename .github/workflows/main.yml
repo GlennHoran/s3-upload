@@ -41,12 +41,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET }}
           aws-region: us-east-1
 
-      - name: Set Bucket address environment Variable
-        run: BUCKET=${{ secrets.BUCKET_ADDRESS }}
-
-      - name: check bucket address is set3
-        run: echo process.env['BUCKET']
-
       - name: Copy files to the test website with the AWS CLI
         run: aws s3 sync photo-upload-website/dist ${{ secrets.BUCKET_ADDRESS }}
 
@@ -54,4 +48,4 @@ jobs:
         run: |
           cd cdk
           npm install
-          npm run deploy
+          tsc && cdk bootstrap && cdk deploy bucketName=${{ secrets.BUCKET_ADDRESS }}
