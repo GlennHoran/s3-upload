@@ -39,8 +39,8 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET }}
           aws-region: us-east-1
 
-#      - name: Copy files to the test website with the AWS CLI
-#        run: aws s3 sync photo-upload-website/dist s3://cdkstack-ghoranwebsitephotoupload5b64b471-1qnrhldz7pmqc
+      - name: Copy files to the test website with the AWS CLI
+        run: aws s3 sync photo-upload-website/dist ${{ secrets.BUCKET_ADDRESS }}
 
       - name: CDK Deploy
         run: |
