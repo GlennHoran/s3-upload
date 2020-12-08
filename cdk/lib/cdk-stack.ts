@@ -48,7 +48,7 @@ export class CdkStack extends cdk.Stack {
                     // @ts-ignore
                     'KEY': process.env.npm_config_KEY,
                     // @ts-ignore
-                    'SECRET': process.env.npm_config_KEY
+                    'SECRET': process.env.npm_config_SECRET
                 }
             }
         );
