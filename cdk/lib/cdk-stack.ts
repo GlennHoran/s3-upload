@@ -41,6 +41,7 @@ export class CdkStack extends cdk.Stack {
                 //the file is getSignedUrls and it's the default export.
                 handler: 'getSignedUrl.default',
                 tracing: Tracing.ACTIVE,
+                //this environment variable comes from the npm deploy script being run with npm_config_BUCKET being passed in.
                 environment: {
                     // @ts-ignore
                     'BUCKET': process.env.npm_config_BUCKET,

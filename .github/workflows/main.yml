@@ -41,12 +41,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET }}
           aws-region: us-east-1
 
-      - name: Set Bucket address environment Variable
-        run: BUCKET=${{ secrets.BUCKET_ADDRESS }}
-
-      - name: check bucket address is set3
-        run: echo process.env['BUCKET']
-
       - name: Copy files to the test website with the AWS CLI
         run: aws s3 sync photo-upload-website/dist ${{ secrets.BUCKET_ADDRESS }}
 
@@ -54,4 +48,6 @@ jobs:
         run: |
           cd cdk
           npm install
+#          here I'm populating the npm_config_BUCKET variable from github actions secrets and using it in my stack to
+#          set it as an environment variable for my lambda function.
           npm run deploy --BUCKET=${{ secrets.BUCKET_ADDRESS }}
