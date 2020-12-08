@@ -42,14 +42,8 @@ jobs:
       - name: Set Bucket address environment Variable
         run: BUCKET=${{ secrets.BUCKET_ADDRESS }}
 
-      - name: check bucket address is set
-        run: echo BUCKET
-
-      - name: check bucket address is set2
-        run: echo process.env.BUCKET
-
       - name: check bucket address is set3
-        run: echo process.env.['BUCKET']
+        run: echo process.env['BUCKET']
 
       - name: Copy files to the test website with the AWS CLI
         run: aws s3 sync photo-upload-website/dist ${{ secrets.BUCKET_ADDRESS }}
