@@ -2,7 +2,7 @@ import * as AWS from 'aws-sdk'
 
 const handler = async function(event:any) {
     console.log("request:", JSON.stringify(event, undefined, 2));
-    return sendRes(200, event.body);
+    return sendRes(200, `bucket = ${process.env['BUCKET']}, aws id = ${process.env['AWS_ACCESS_KEY_ID']} `);
 };
 
 const sendRes = (status:number, body:string) => {
