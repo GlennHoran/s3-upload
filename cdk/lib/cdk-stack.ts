@@ -2,16 +2,11 @@ import * as cdk from '@aws-cdk/core';
 import * as s3 from '@aws-cdk/aws-s3';
 import {Code, Function, Runtime, Tracing} from '@aws-cdk/aws-lambda';
 import {LambdaRestApi} from '@aws-cdk/aws-apigateway';
-import {CfnParameter} from "@aws-cdk/core";
 
 
 export class CdkStack extends cdk.Stack {
     constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
         super(scope, id, props);
-        console.log("log1: ", process.env.npm_config_BUCKET)
-        console.log("log2: ",  process.env['BUCKET'])
-        console.log("log3: ", process.env)
-
 
         const storageBucket = new s3.Bucket(this, 'photo-storage', {
             versioned: true,
@@ -44,11 +39,7 @@ export class CdkStack extends cdk.Stack {
                 //this environment variable comes from the npm deploy script being run with npm_config_BUCKET being passed in.
                 environment: {
                     // @ts-ignore
-                    'BUCKET_NAME': process.env.npm_config_BUCKET_NAME,
-                    // @ts-ignore
-                    'KEY': process.env.npm_config_KEY,
-                    // @ts-ignore
-                    'SECRET': process.env.npm_config_SECRET
+                    'BUCKET_NAME': process.env.npm_config_BUCKET_NAME
                 }
             }
         );
@@ -61,6 +52,8 @@ export class CdkStack extends cdk.Stack {
 
         //need to allow the lambda to read/write from the website. The lambda generates the
         // presigned URL so needs read/write permission
+        // @ts-ignore
+        storageBucket.grantReadWrite(getSignedUrlLambda)
         // @ts-ignore
         websiteBucket.grantReadWrite(getSignedUrlLambda)
     }

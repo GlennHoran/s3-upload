@@ -48,4 +48,4 @@ jobs:
         run: |
           cd cdk
           npm install
-          npm run deploy --BUCKET_NAME=${{ secrets.BUCKET_NAME }} --KEY=${{ secrets.AWS_KEY }} --SECRET=${{ secrets.AWS_SECRET }}
+          npm run deploy --BUCKET_NAME=${{ secrets.BUCKET_NAME }}
