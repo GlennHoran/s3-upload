@@ -29,7 +29,10 @@ const sendRes = (status:number, body:string) => {
     return {
         statusCode: status,
         headers: {
-            "Content-Type": "text/html"
+            "Content-Type": "text/html",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Headers": "Content-Type",
+            "Access-Control-Allow-Methods": "OPTIONS,GET,POST,PUT"
         },
         body: body
     };
