@@ -11,6 +11,7 @@ const handler = async function(event:any) {
     //this isn't great, but it's short.
     const operation = event.httpMethod === "POST"? 'putObject': 'getObject'
     const fileName = event.headers.filename
+    console.log(`method: ${event.httpMethod}, fileName = ${fileName}`)
         try {
             // Pre-signing a putObject (asynchronously)
             const params = { Bucket: BUCKET_NAME, Key: fileName, Expires: signedUrlExpiresSeconds }

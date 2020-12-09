@@ -11,33 +11,32 @@ export class CdkStack extends cdk.Stack {
 
         const storageBucket = new s3.Bucket(this, 'photo-storage', {
             versioned: true,
-            //might need cors.
-            // cors: [
-            //     {
-            //         maxAge: 3000,
-            //         allowedOrigins: Cors.ALL_ORIGINS,
-            //         allowedHeaders: Cors.DEFAULT_HEADERS,
-            //         allowedMethods: [ s3.HttpMethods.POST,
-            //             s3.HttpMethods.PUT,
-            //             s3.HttpMethods.GET],
-            //     },
-            // ],
+            cors: [
+                {
+                    maxAge: 3000,
+                    allowedOrigins: Cors.ALL_ORIGINS,
+                    allowedHeaders: Cors.DEFAULT_HEADERS,
+                    allowedMethods: [ s3.HttpMethods.POST,
+                        s3.HttpMethods.PUT,
+                        s3.HttpMethods.GET],
+                },
+            ],
         });
 
         const websiteBucket = new s3.Bucket(this, 'website-photo-upload', {
             versioned: true,
             websiteIndexDocument: "index.html",
             publicReadAccess: true,
-            // cors: [
-            //     {
-            //         maxAge: 3000,
-            //         allowedOrigins: Cors.ALL_ORIGINS,
-            //         allowedHeaders: Cors.DEFAULT_HEADERS,
-            //         allowedMethods: [ s3.HttpMethods.POST,
-            //             s3.HttpMethods.PUT,
-            //             s3.HttpMethods.GET],
-            //     },
-            // ],
+            cors: [
+                {
+                    maxAge: 3000,
+                    allowedOrigins: Cors.ALL_ORIGINS,
+                    allowedHeaders: Cors.DEFAULT_HEADERS,
+                    allowedMethods: [ s3.HttpMethods.POST,
+                        s3.HttpMethods.PUT,
+                        s3.HttpMethods.GET],
+                },
+            ],
         });
 
         const getSignedUrlLambda = new Function(this, 'signed-url-lambda', {
