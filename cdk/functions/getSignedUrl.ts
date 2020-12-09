@@ -13,8 +13,7 @@ const handler = async function(event:any) {
         try {
             // Pre-signing a putObject (asynchronously)
             const params = { Bucket: BUCKET_NAME, Key: event.body, Expires: signedUrlExpiresSeconds }
-            const uploadUrl: string = await s3.getSignedUrl(operation, params)
-
+            const uploadUrl: string = s3.getSignedUrl(operation, params)
             if (!uploadUrl) {
                 return { error: 'Unable to get presigned upload URL from S3' }
             }
@@ -32,7 +31,7 @@ const sendRes = (status:number, body:string) => {
             "Content-Type": "text/html",
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Headers": "Content-Type",
-            "Access-Control-Allow-Methods": "OPTIONS,GET,POST,PUT"
+            "Access-Control-Allow-Methods": "OPTIONS, GET, POST, PUT"
         },
         body: body
     };
