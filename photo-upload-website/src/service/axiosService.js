@@ -4,7 +4,7 @@ const url = "https://wp0r948d32.execute-api.us-east-1.amazonaws.com/prod/"
 
 export const getPresignedUrl = async (fileName) => {
     try{
-        const response = axios.post(url, fileName)
+        const response = await axios.post(url, fileName)
         console.log(response)
 } catch (err) {
         console.error(err)
