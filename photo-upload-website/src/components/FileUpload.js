@@ -1,14 +1,21 @@
 import React, {useState} from 'react'
-import {getPreSignedUrl} from "../service/axiosService";
+import {getPreSignedUrlUpload, getPreSignedUrlDownload} from "../service/axiosService";
 
 const FileUpload = props => {
     const [input, setInput] = useState("");
     const [url, setUrl] = useState("");
     const [loading, setLoading] = useState(false)
 
-    async function getUrl(input) {
+    async function getUrlUpload(input) {
         setLoading(true)
-        let url = await getPreSignedUrl(input)
+        let url = await getPreSignedUrlUpload(input)
+        setUrl(url)
+        setLoading(false)
+    }
+
+    async function getUrlDownload(input) {
+        setLoading(true)
+        let url = await getPreSignedUrlDownload(input)
         setUrl(url)
         setLoading(false)
     }
@@ -16,7 +23,9 @@ const FileUpload = props => {
     return (<div>
         <input onChange={(event) => setInput(event.target.value)}
                value={input}/>
-        <button onClick={() => getUrl(input)}>Get presigned URL</button>
+        <button onClick={() => getUrlUpload(input)}>Get presigned URL Upload</button>
+        <button onClick={() => getUrlDownload(input)}>Get presigned URL Download</button>
+
         {loading? <div>
             LOADING
         </div>: <div>

@@ -7,12 +7,13 @@ const handler = async function(event:any) {
 
     const s3 = new AWS.S3({apiVersion: "2006-03-01"})
     console.log(`bucket: ${BUCKET_NAME} fileName: ${event.body}`);
-    console.log(`event: ${event}`);
+    console.log(`event: ${JSON.stringify(event)}`);
     //this isn't great, but it's short.
     const operation = event.httpMethod === "POST"? 'putObject': 'getObject'
+    const fileName = event.headers.filename
         try {
             // Pre-signing a putObject (asynchronously)
-            const params = { Bucket: BUCKET_NAME, Key: event.body, Expires: signedUrlExpiresSeconds }
+            const params = { Bucket: BUCKET_NAME, Key: fileName, Expires: signedUrlExpiresSeconds }
             const uploadUrl: string = s3.getSignedUrl(operation, params)
             if (!uploadUrl) {
                 return { error: 'Unable to get presigned upload URL from S3' }
