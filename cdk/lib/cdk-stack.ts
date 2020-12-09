@@ -1,7 +1,8 @@
 import * as cdk from '@aws-cdk/core';
 import * as s3 from '@aws-cdk/aws-s3';
 import {Code, Function, Runtime, Tracing} from '@aws-cdk/aws-lambda';
-import {LambdaRestApi} from '@aws-cdk/aws-apigateway';
+import {Cors, LambdaRestApi} from '@aws-cdk/aws-apigateway';
+import {ALL_METHODS} from "@aws-cdk/aws-apigateway/lib/util";
 
 
 export class CdkStack extends cdk.Stack {
@@ -47,7 +48,11 @@ export class CdkStack extends cdk.Stack {
         //this construct should do all the plumbing for us - permissions to allow apigw to invoke the lambda +
         //all traffic routed to lambda regardless of path.
         const api = new LambdaRestApi(this, 'website-api', {
-            handler: getSignedUrlLambda
+            handler: getSignedUrlLambda,
+            defaultCorsPreflightOptions: {
+                allowOrigins: Cors.ALL_ORIGINS,
+                allowMethods: ALL_METHODS
+            }
         })
 
         //need to allow the lambda to read/write from the website. The lambda generates the

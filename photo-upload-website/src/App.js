@@ -1,8 +1,11 @@
 import React from "react";
+import FilePreview from "./components/FilesPreview";
+import FileUpload from "./components/FileUpload";
 
 export default () => (
-  <>
-    <h1>Welcome to React Parcel Micro App!</h1>
-    <p>Hard to get more minimal than this React app.</p>
-  </>
+  <div>
+    <h1>Welcome to this S3 file upload boi!</h1>
+    <FileUpload/>
+      <FilePreview/>
+  </div>
 );
