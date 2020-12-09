@@ -60,7 +60,8 @@ export class CdkStack extends cdk.Stack {
             handler: getSignedUrlLambda,
             defaultCorsPreflightOptions: {
                 allowOrigins: Cors.ALL_ORIGINS,
-                allowMethods: ALL_METHODS
+                allowMethods: ALL_METHODS,
+                allowHeaders: ["fileName"]
             }
         })
 
