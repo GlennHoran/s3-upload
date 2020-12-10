@@ -5,7 +5,7 @@ const url = "https://wp0r948d32.execute-api.us-east-1.amazonaws.com/prod/"
 
 export const getPreSignedUrlUpload = (fileName) => axios.post(url, {
     headers: {
-        fileName: fileName
+        filename: fileName
     }
 })
     .then(function (response) {
@@ -18,7 +18,7 @@ export const getPreSignedUrlUpload = (fileName) => axios.post(url, {
 
 export const getPreSignedUrlDownload = (fileName) => axios.get(url, {
     headers: {
-        fileName: fileName
+        filename: fileName
     }
 })
     .then(function (response) {

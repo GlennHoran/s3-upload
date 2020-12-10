@@ -33,7 +33,7 @@ const sendRes = (status:number, body:string) => {
         headers: {
             "Content-Type": "text/html",
             "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Headers": Cors.DEFAULT_HEADERS.concat(['fileName']),
+            "Access-Control-Allow-Headers": Cors.DEFAULT_HEADERS.concat(['filename']),
             "Access-Control-Allow-Methods": "OPTIONS, GET, POST, PUT"
         },
         body: body
