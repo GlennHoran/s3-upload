@@ -3,11 +3,7 @@ import {formatUrl} from "../util";
 
 const url = "https://wp0r948d32.execute-api.us-east-1.amazonaws.com/prod/"
 
-export const getPreSignedUrlUpload = (fileName) => axios.post(url, {
-    params: {
-        filename: fileName
-    }
-})
+export const getPreSignedUrlUpload = (fileName) => axios.post(`${url}?filename=${encodeURI(fileName)}`)
     .then(function (response) {
         console.log(response.data)
         return formatUrl(response.data);
@@ -16,11 +12,7 @@ export const getPreSignedUrlUpload = (fileName) => axios.post(url, {
         console.log(error);
     });
 
-export const getPreSignedUrlDownload = (fileName) => axios.get(url, {
-    params: {
-        filename: fileName
-    }
-})
+export const getPreSignedUrlDownload = (fileName) => axios.get(`${url}?filename=${encodeURI(fileName)}`)
     .then(function (response) {
         console.log(response.data)
         return formatUrl(response.data);
