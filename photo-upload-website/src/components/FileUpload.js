@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {getPreSignedUrlUpload, getPreSignedUrlDownload} from "../service/axiosService";
+import {getPreSignedUrl} from "../service/axiosService";
 
 const FileUpload = props => {
     const [input, setInput] = useState("");
@@ -8,14 +8,14 @@ const FileUpload = props => {
 
     async function getUrlUpload(input) {
         setLoading(true)
-        let url = await getPreSignedUrlUpload(input)
+        let url = await getPreSignedUrl(input, "upload")
         setUrl(url)
         setLoading(false)
     }
 
     async function getUrlDownload(input) {
         setLoading(true)
-        let url = await getPreSignedUrlDownload(input)
+        let url = await getPreSignedUrl(input, "download")
         setUrl(url)
         setLoading(false)
     }

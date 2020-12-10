@@ -9,9 +9,9 @@ const handler = async function(event:any) {
     console.log(`bucket: ${BUCKET_NAME} fileName: ${event.body}`);
     console.log(`event: ${JSON.stringify(event)}`);
     //this isn't great, but it's short.
-    const operation = event.httpMethod === "POST"? 'putObject': 'getObject'
-    const fileName = event.params.filename
-    console.log("hello from local machine")
+    const operation = event.queryStringParameters.urltype === 'upload'? 'putObject': 'getObject'
+    const fileName = event.queryStringParameters.filename
+    console.log("hello from local machine2")
     console.log(`method: ${event.httpMethod}, fileName = ${fileName}`)
         try {
             // Pre-signing a putObject (asynchronously)
