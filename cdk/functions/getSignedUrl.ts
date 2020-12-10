@@ -11,7 +11,8 @@ const handler = async function(event:any) {
     console.log(`event: ${JSON.stringify(event)}`);
     //this isn't great, but it's short.
     const operation = event.httpMethod === "POST"? 'putObject': 'getObject'
-    const fileName = event.headers.filename
+    const fileName = event.params.filename
+    console.log("hello from local machine")
     console.log(`method: ${event.httpMethod}, fileName = ${fileName}`)
         try {
             // Pre-signing a putObject (asynchronously)
@@ -33,7 +34,7 @@ const sendRes = (status:number, body:string) => {
         headers: {
             "Content-Type": "text/html",
             "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Headers": Cors.DEFAULT_HEADERS.concat(['filename']),
+            "Access-Control-Allow-Headers": Cors.DEFAULT_HEADERS,
             "Access-Control-Allow-Methods": "OPTIONS, GET, POST, PUT"
         },
         body: body

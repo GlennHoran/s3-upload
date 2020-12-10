@@ -3,3 +3,4 @@
 export const formatUrl = (unformattedUrl ) => {
     return unformattedUrl.substr(6)
 }
+

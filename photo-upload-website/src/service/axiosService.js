@@ -4,7 +4,7 @@ import {formatUrl} from "../util";
 const url = "https://wp0r948d32.execute-api.us-east-1.amazonaws.com/prod/"
 
 export const getPreSignedUrlUpload = (fileName) => axios.post(url, {
-    headers: {
+    params: {
         filename: fileName
     }
 })
@@ -17,7 +17,7 @@ export const getPreSignedUrlUpload = (fileName) => axios.post(url, {
     });
 
 export const getPreSignedUrlDownload = (fileName) => axios.get(url, {
-    headers: {
+    params: {
         filename: fileName
     }
 })
