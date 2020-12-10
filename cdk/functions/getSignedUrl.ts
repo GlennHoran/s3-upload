@@ -32,7 +32,7 @@ const sendRes = (status:number, body:string) => {
         headers: {
             "Content-Type": "text/html",
             "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Headers": "Content-Type",
+            "Access-Control-Allow-Headers": "*",
             "Access-Control-Allow-Methods": "OPTIONS, GET, POST, PUT"
         },
         body: body

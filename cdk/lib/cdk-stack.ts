@@ -15,7 +15,7 @@ export class CdkStack extends cdk.Stack {
                 {
                     maxAge: 3000,
                     allowedOrigins: Cors.ALL_ORIGINS,
-                    allowedHeaders: Cors.DEFAULT_HEADERS,
+                    allowedHeaders: ['*'],
                     allowedMethods: [ s3.HttpMethods.POST,
                         s3.HttpMethods.PUT,
                         s3.HttpMethods.GET],
@@ -31,7 +31,7 @@ export class CdkStack extends cdk.Stack {
                 {
                     maxAge: 3000,
                     allowedOrigins: Cors.ALL_ORIGINS,
-                    allowedHeaders: Cors.DEFAULT_HEADERS,
+                    allowedHeaders: ['*'],
                     allowedMethods: [ s3.HttpMethods.POST,
                         s3.HttpMethods.PUT,
                         s3.HttpMethods.GET],
