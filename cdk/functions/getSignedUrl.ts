@@ -1,4 +1,5 @@
 import * as AWS from 'aws-sdk'
+import {Cors} from "@aws-cdk/aws-apigateway";
 
 const handler = async function(event:any) {
     const BUCKET_NAME = process.env['BUCKET_NAME'];
@@ -32,7 +33,7 @@ const sendRes = (status:number, body:string) => {
         headers: {
             "Content-Type": "text/html",
             "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Headers": "*",
+            "Access-Control-Allow-Headers": Cors.DEFAULT_HEADERS.concat(['fileName']),
             "Access-Control-Allow-Methods": "OPTIONS, GET, POST, PUT"
         },
         body: body

@@ -15,7 +15,7 @@ export class CdkStack extends cdk.Stack {
                 {
                     maxAge: 3000,
                     allowedOrigins: Cors.ALL_ORIGINS,
-                    allowedHeaders: ['*'],
+                    allowedHeaders: Cors.DEFAULT_HEADERS.concat(['fileName']),
                     allowedMethods: [ s3.HttpMethods.POST,
                         s3.HttpMethods.PUT,
                         s3.HttpMethods.GET],
@@ -31,7 +31,7 @@ export class CdkStack extends cdk.Stack {
                 {
                     maxAge: 3000,
                     allowedOrigins: Cors.ALL_ORIGINS,
-                    allowedHeaders: ['*'],
+                    allowedHeaders: Cors.DEFAULT_HEADERS.concat(['fileName']),
                     allowedMethods: [ s3.HttpMethods.POST,
                         s3.HttpMethods.PUT,
                         s3.HttpMethods.GET],
@@ -61,7 +61,7 @@ export class CdkStack extends cdk.Stack {
             defaultCorsPreflightOptions: {
                 allowOrigins: Cors.ALL_ORIGINS,
                 allowMethods: ALL_METHODS,
-                allowHeaders: ["*"]
+                allowHeaders: Cors.DEFAULT_HEADERS.concat(['fileName']),
             }
         })
 
