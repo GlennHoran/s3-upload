@@ -61,7 +61,7 @@ export class CdkStack extends cdk.Stack {
             defaultCorsPreflightOptions: {
                 allowOrigins: Cors.ALL_ORIGINS,
                 allowMethods: ALL_METHODS,
-                allowHeaders: ["fileName"]
+                allowHeaders: ["*"]
             }
         })
 
