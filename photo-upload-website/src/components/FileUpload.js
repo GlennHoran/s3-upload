@@ -4,6 +4,7 @@ import {getPreSignedUrl, uploadFileToS3} from "../service/axiosService";
 const FileUpload = props => {
 
     const [input, setInput] = useState("");
+    const [fileList, setFileList] = useState([]);
     const [url, setUrl] = useState("");
     const [status, setStatus] = useState("")
     const [file, setFile] = React.useState("");
@@ -31,6 +32,11 @@ const FileUpload = props => {
         setFile(event.target.files[0]);
     }
 
+    async function getListOfFiles() {
+        const listOfFiles = await listObjectsFromS3()
+        setFileList(listOfFiles)
+    }
+
     return (<div>
         <form>
             <label> Image Key  </label>
@@ -43,12 +49,15 @@ const FileUpload = props => {
         <br/>
         <button onClick={() => getUrlThenUploadFileToS3()}>Upload File</button>
         <button onClick={() => getImage()}>Get image</button>
+        <button onClick={()=> getListOfFiles()}></button>
         <br/>
         <br/>
         <div>STATUS: {status}</div>
         <br/>
         <div>Image Preview: </div>
         <img src={imageUrl} alt=""/>
+        <br/>
+        Files in bucket: {fileList.forEach(key => <div>{key}</div>)}
     </div>)
 }
 

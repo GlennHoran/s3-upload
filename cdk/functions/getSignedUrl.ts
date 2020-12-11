@@ -40,17 +40,20 @@ const handler = async function (event: any) {
             return {error: 'An unexpected error occured during password change.'}
         }
     } else if (event.httpMethod === 'GET') {
+        console.log("in the list objects bit")
         const params = {
             Bucket: bucketName
+        };
+        let s3Objects
+        try {
+            s3Objects = await s3.listObjectsV2(params).promise();
+            return sendRes(200, JSON.stringify(s3Objects));
+        } catch (e) {
+            return sendRes(500, "Something went wrong");
         }
-        //@ts-ignore
-
-        s3.listObjectsV2(params, (function (err, data) {
-            if (err) console.log(err.message)
-            else return sendRes(200, JSON.stringify(data))
-        }))
     } else {
-        return sendRes(405, "Method not supported yet")
+        console.log('method not supported else')
+        return sendRes(405, "Method not supported yet");
     }
 };
 
