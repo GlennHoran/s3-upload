@@ -43,6 +43,8 @@ const handler = async function (event: any) {
         const params = {
             Bucket: bucketName
         }
+        //@ts-ignore
+
         s3.listObjectsV2(params, (function (err, data) {
             if (err) console.log(err.message)
             else return sendRes(200, JSON.stringify(data))
