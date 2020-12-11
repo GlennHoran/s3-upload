@@ -38,8 +38,6 @@ const FileUpload = props => {
 
     return (<div>
         <form>
-        <input onChange={(event) => setInput(event.target.value)}
-               value={input}/>
                <label> Upload file </label>
             <input type="file" onChange={handleUpload} />
         </form>

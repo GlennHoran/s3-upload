@@ -4,7 +4,7 @@ import {formatUrl} from "../util";
 const url = "https://wp0r948d32.execute-api.us-east-1.amazonaws.com/prod/"
 
 //consider changing this to a post so I can send metadata (title, description etc)
-export const getPreSignedUrl = (fileName, urlTypeRequested) => axios.post(`url`, {
+export const getPreSignedUrl = (fileName, urlTypeRequested) => axios.post(url, {
         fileName: fileName,
         urlTypeRequested: urlTypeRequested
 }
@@ -21,6 +21,5 @@ export const uploadFileToS3 = (url, file) => axios.put(url, file)
         console.log(response.data)
     })
     .catch(function (error) {
-
         console.log(error);
     });
