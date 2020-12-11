@@ -6,13 +6,11 @@ const handler = async function(event:any) {
     const signedUrlExpiresSeconds = 60 * 5;
 
     const s3 = new AWS.S3({apiVersion: "2006-03-01"})
-    console.log(`bucket: ${BUCKET_NAME} fileName: ${event.body}`);
+    console.log(`bucket: ${BUCKET_NAME} `);
     console.log(`event: ${JSON.stringify(event)}`);
-    //this isn't great, but it's short.
-    const operation = event.queryStringParameters.urltype === 'upload'? 'putObject': 'getObject'
-    const fileName = event.queryStringParameters.filename
-    console.log("hello from local machine2")
-    console.log(`method: ${event.httpMethod}, fileName = ${fileName}`)
+    const operation = event.body.urlTypeRequested === 'upload'? 'putObject': 'getObject'
+    const fileName = event.body.fileName
+    console.log(`operation: ${operation}, fileName = ${fileName}`)
         try {
             // Pre-signing a putObject (asynchronously)
             const params = { Bucket: BUCKET_NAME, Key: fileName, Expires: signedUrlExpiresSeconds }
