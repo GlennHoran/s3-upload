@@ -6,11 +6,11 @@ const handler = async function (event: any) {
     const s3 = new AWS.S3({apiVersion: "2006-03-01"})
     console.log(`event: ${JSON.stringify(event)}`);
     const payload = JSON.parse(event.body)
-    const httpMethod = payload.httpMethod
+    const httpMethod = event.httpMethod
     console.log("method: ", httpMethod)
     let operation
     let params
-    if (payload.payload.urlTypeRequested === 'upload') {
+    if (payload.urlTypeRequested === 'upload') {
         operation = 'putObject'
         params = {
             Bucket: BUCKET_NAME,
