@@ -1,31 +1,35 @@
 import * as AWS from 'aws-sdk'
 
-const handler = async function(event:any) {
+const handler = async function (event: any) {
     const BUCKET_NAME = process.env['BUCKET_NAME'];
 
     const signedUrlExpiresSeconds = 60 * 5;
 
     const s3 = new AWS.S3({apiVersion: "2006-03-01"})
-    console.log(`bucket: ${BUCKET_NAME} `);
     console.log(`event: ${JSON.stringify(event)}`);
-    const operation = event.body.urlTypeRequested === 'upload'? 'putObject': 'getObject'
-    const fileName = event.body.fileName
-    console.log(`operation: ${operation}, fileName = ${fileName}`)
-        try {
-            // Pre-signing a putObject (asynchronously)
-            const params = { Bucket: BUCKET_NAME, Key: fileName, Expires: signedUrlExpiresSeconds }
-            const uploadUrl: string = s3.getSignedUrl(operation, params)
-            if (!uploadUrl) {
-                return { error: 'Unable to get presigned upload URL from S3' }
-            }
-            return sendRes(200, `URL = ${uploadUrl}`);
-        } catch (e) {
-            console.log(e)
-            return { error: 'An unexpected error occured during password change.' }
+    const payload = JSON.parse(event.body)
+    const operation = payload.urlTypeRequested === 'upload' ? 'putObject' : 'getObject';
+    const fileName = payload.fileName;
+    const params = {
+        Bucket: BUCKET_NAME,
+        Key: fileName,
+        Expires: signedUrlExpiresSeconds,
+        ContentType: 'application/x-www-form-urlencoded'
+    }
+    try {
+        // Pre-signing a putObject (asynchronously)
+        const uploadUrl: string = s3.getSignedUrl(operation, params)
+        if (!uploadUrl) {
+            return {error: 'Unable to get presigned upload URL from S3'}
         }
+        return sendRes(200, `URL = ${uploadUrl}`);
+    } catch (e) {
+        console.log(e)
+        return {error: 'An unexpected error occured during password change.'}
+    }
 };
 
-const sendRes = (status:number, body:string) => {
+const sendRes = (status: number, body: string) => {
     return {
         statusCode: status,
         headers: {

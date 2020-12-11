@@ -68,7 +68,7 @@ export class CdkStack extends cdk.Stack {
         //need to allow the lambda to read/write from the website. The lambda generates the
         // presigned URL so needs read/write permission
         // @ts-ignore
-        storageBucket.grantReadWrite(getSignedUrlLambda)
+        storageBucket.grantPublicAccess(getSignedUrlLambda)
         // @ts-ignore
         websiteBucket.grantReadWrite(getSignedUrlLambda)
     }
