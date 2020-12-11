@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {getPreSignedUrl, uploadFileToS3} from "../service/axiosService";
+import {getPreSignedUrl, uploadFileToS3, listObjectsFromS3} from "../service/axiosService";
 
 const FileUpload = props => {
 
@@ -49,7 +49,7 @@ const FileUpload = props => {
         <br/>
         <button onClick={() => getUrlThenUploadFileToS3()}>Upload File</button>
         <button onClick={() => getImage()}>Get image</button>
-        <button onClick={()=> getListOfFiles()}></button>
+        <button onClick={()=> getListOfFiles()}>List Files in Bucket</button>
         <br/>
         <br/>
         <div>STATUS: {status}</div>
