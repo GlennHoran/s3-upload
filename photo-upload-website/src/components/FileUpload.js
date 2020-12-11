@@ -11,7 +11,7 @@ const FileUpload = props => {
     async function getUrlThenUploadFileToS3() {
         setStatus("Getting PreSigned URL")
         let fileName = file.name
-        let url = await getPreSignedUrl(fileName)
+        let url = await getPreSignedUrl(fileName, "upload")
         setStatus(`URL retrieved, uploading file: ${fileName}`)
         console.log('url recieved: ', url)
         let status = await uploadFileToS3(url, file)
@@ -20,7 +20,7 @@ const FileUpload = props => {
 
     async function getImage() {
         setStatus("Fetching presigned URL ")
-        let url = await getPreSignedUrl(input)
+        let url = await getPreSignedUrl(input, "download")
         setStatus("Image URL retrieved")
         setImageUrl(url)
     }
