@@ -13,7 +13,7 @@ export const getPreSignedUrl = (fileName, urlTypeRequested) => axios.post(url, {
         return formatUrl(response.data);
     })
     .catch(function (error) {
-        console.log(error);
+        console.log("something went wrong: ", error);
     });
 
 export const uploadFileToS3 = (url, file) => axios.put(url, file)

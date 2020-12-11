@@ -4,6 +4,7 @@ import {getPreSignedUrl, uploadFileToS3} from "../service/axiosService";
 const FileUpload = props => {
 
     const [input, setInput] = useState("");
+    const [url, setUrl] = useState("");
     const [status, setStatus] = useState("")
     const [file, setFile] = React.useState("");
     const [imageUrl, setImageUrl] = React.useState("");
@@ -13,6 +14,7 @@ const FileUpload = props => {
         let fileName = file.name
         let url = await getPreSignedUrl(fileName, "upload")
         setStatus(`URL retrieved, uploading file: ${fileName}`)
+        setUrl(url)
         console.log('url recieved: ', url)
         let status = await uploadFileToS3(url, file)
         setStatus(status)
