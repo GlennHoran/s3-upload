@@ -23,3 +23,4 @@ export const uploadFileToS3 = (url, file) => axios.put(url, file)
     .catch(function (error) {
         return `Error: ${error.toString()}`
     });
+
