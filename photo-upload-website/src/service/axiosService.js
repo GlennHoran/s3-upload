@@ -18,8 +18,8 @@ export const getPreSignedUrl = (fileName, urlTypeRequested) => axios.post(url, {
 
 export const uploadFileToS3 = (url, file) => axios.put(url, file)
     .then(function (response) {
-        console.log(response.data)
+        return "File Uploaded Successfully!!"
     })
     .catch(function (error) {
-        console.log(error);
+        return `Error: ${error.toString()}`
     });

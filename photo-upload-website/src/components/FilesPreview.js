@@ -2,7 +2,7 @@ import React from 'react'
 
 const FilePreview = props => (
     <div>
-        File Preview
+        {/*File Preview*/}
     </div>
 )
 
