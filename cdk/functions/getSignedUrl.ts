@@ -1,7 +1,8 @@
 import * as AWS from 'aws-sdk'
-
+//@ts-ignore
 const handler = async function (event: any) {
-    const BUCKET_NAME = process.env['BUCKET_NAME'];
+    //@ts-ignore
+    const bucketName: string = process.env['BUCKET_NAME'];
     const signedUrlExpiresSeconds = 60 * 5;
     const s3 = new AWS.S3({apiVersion: "2006-03-01"})
     console.log(`event: ${JSON.stringify(event)}`);
@@ -10,33 +11,44 @@ const handler = async function (event: any) {
     console.log("method: ", httpMethod)
     let operation
     let params
-    if (payload.urlTypeRequested === 'upload') {
-        operation = 'putObject'
-        params = {
-            Bucket: BUCKET_NAME,
-            Key: payload.fileName,
-            Expires: signedUrlExpiresSeconds,
-            ContentType: 'application/x-www-form-urlencoded'
+    if (event.httpMethod === 'POST') {
+        if (payload.urlTypeRequested === 'upload') {
+            operation = 'putObject'
+            params = {
+                Bucket: bucketName,
+                Key: payload.fileName,
+                Expires: signedUrlExpiresSeconds,
+                ContentType: 'application/x-www-form-urlencoded'
+            }
+        } else {
+            operation = 'getObject'
+            params = {
+                Bucket: bucketName,
+                Key: payload.fileName,
+                Expires: signedUrlExpiresSeconds,
+            }
         }
+        try {
+            // Pre-signing a putObject (asynchronously)
+            const preSignedUrl: string = s3.getSignedUrl(operation, params)
+            if (!preSignedUrl) {
+                return {error: 'Unable to get presigned upload URL from S3'}
+            }
+            return sendRes(200, `URL = ${preSignedUrl}`);
+        } catch (e) {
+            console.log(e)
+            return {error: 'An unexpected error occured during password change.'}
+        }
+    } else if (event.httpMethod === 'GET') {
+        const params = {
+            Bucket: bucketName
+        }
+        s3.listObjectsV2(params, (function (err, data) {
+            if (err) return sendRes(500, err.message)
+            else return sendRes(200, JSON.stringify(data))
+        }))
     } else {
-        operation = 'getObject'
-        params = {
-            Bucket: BUCKET_NAME,
-            Key: payload.fileName,
-            Expires: signedUrlExpiresSeconds,
-        }
-    }
-
-    try {
-        // Pre-signing a putObject (asynchronously)
-        const preSignedUrl: string = s3.getSignedUrl(operation, params)
-        if (!preSignedUrl) {
-            return {error: 'Unable to get presigned upload URL from S3'}
-        }
-        return sendRes(200, `URL = ${preSignedUrl}`);
-    } catch (e) {
-        console.log(e)
-        return {error: 'An unexpected error occured during password change.'}
+        return sendRes(405, "Method not supported yet")
     }
 };
 
