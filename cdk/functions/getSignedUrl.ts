@@ -30,10 +30,13 @@ const sendRes = (status: number, body: string) => {
     };
 };
 
-const getSignedUrl = (s3: AWS.S3, payload: Payload , bucketName: string) => {
+const getSignedUrl = (s3: any, payload: Payload , bucketName: string) => {
+    console.log(`payload: ${JSON.stringify(payload)}, bucketName: ${bucketName}`)
     const signedUrlExpiresSeconds = 60 * 5;
     let operation
     let params
+    console.log(`fileName: ${payload.fileName}, bucketName: ${bucketName}`)
+
     if (payload.urlTypeRequested === 'upload') {
         operation = 'putObject'
         params = {
@@ -50,6 +53,7 @@ const getSignedUrl = (s3: AWS.S3, payload: Payload , bucketName: string) => {
             Expires: signedUrlExpiresSeconds,
         }
     }
+    console.log(`params: ${JSON.stringify(params)}`)
     try {
         // Pre-signing a putObject (asynchronously)
         const preSignedUrl: string = s3.getSignedUrl(operation, params)
