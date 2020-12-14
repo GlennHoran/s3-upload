@@ -4,3 +4,9 @@ export const formatUrl = (unformattedUrl ) => {
     return unformattedUrl.substr(6)
 }
 
+export const renameFile = (originalFile, newName) => {
+    return new File([originalFile], newName, {
+        type: originalFile.type,
+        lastModified: originalFile.lastModified,
+    });
+}

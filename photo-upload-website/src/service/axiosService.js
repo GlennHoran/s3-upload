@@ -26,8 +26,8 @@ export const uploadFileToS3 = (url, file) => axios.put(url, file)
 
 export const listObjectsFromS3 = () => axios.get(url).then(
     function (response) {
-        console.log(JSON.stringify(response.data))
-        console.log(JSON.stringify("2:", response.data.Contents))
+        console.log(`1. ${JSON.stringify(response.data.Contents)}`)
+        console.log(`2 : ${JSON.stringify(response.data.Contents.map(object => object.Key))}`)
         return response.data.Contents.map(object => object.Key)
     }
 ).catch(function (error){

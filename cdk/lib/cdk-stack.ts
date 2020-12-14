@@ -1,8 +1,10 @@
 import * as cdk from '@aws-cdk/core';
 import * as s3 from '@aws-cdk/aws-s3';
 import {Code, Function, Runtime, Tracing} from '@aws-cdk/aws-lambda';
+import { S3EventSource } from '@aws-cdk/aws-lambda-event-sources'
 import {Cors, LambdaRestApi} from '@aws-cdk/aws-apigateway';
 import {ALL_METHODS} from "@aws-cdk/aws-apigateway/lib/util";
+import {EventType} from "@aws-cdk/aws-s3";
 
 
 export class CdkStack extends cdk.Stack {
@@ -54,6 +56,18 @@ export class CdkStack extends cdk.Stack {
             }
         );
 
+        const imageProcessorLambda = new Function(this, 'image-processor-lambda', {
+                runtime: Runtime.NODEJS_12_X,
+                code: Code.fromAsset('functions'),
+                handler: 'imageProcessor.default',
+                tracing: Tracing.ACTIVE,
+                environment: {
+                    // @ts-ignore
+                    'BUCKET_NAME': process.env.npm_config_BUCKET_NAME
+                }
+            }
+        );
+
         //this construct should do all the plumbing for us - permissions to allow apigw to invoke the lambda +
         //all traffic routed to lambda regardless of path.
         const api = new LambdaRestApi(this, 'website-api', {
@@ -71,6 +85,12 @@ export class CdkStack extends cdk.Stack {
         storageBucket.grantPublicAccess(getSignedUrlLambda)
         // @ts-ignore
         websiteBucket.grantReadWrite(getSignedUrlLambda)
+        //adding event to trigger imageProcessor on image upload
+        // @ts-ignore
+        const eventSource = imageProcessorLambda.addEventSource(new S3EventSource(storageBucket, {
+            events: [EventType.OBJECT_CREATED],
+            filters: [{prefix: 'originals/'}]
+        }))
     }
 }
 
