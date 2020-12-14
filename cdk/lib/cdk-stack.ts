@@ -82,7 +82,7 @@ export class CdkStack extends cdk.Stack {
         //need to allow the lambda to read/write from the website. The lambda generates the
         // presigned URL so needs read/write permission
         // @ts-ignore
-        storageBucket.grantPublicAccess(getSignedUrlLambda)
+        storageBucket.grantReadWrite(getSignedUrlLambda)
         // @ts-ignore
         websiteBucket.grantReadWrite(getSignedUrlLambda)
         //adding event to trigger imageProcessor on image upload

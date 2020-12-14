@@ -1,6 +1,7 @@
 import * as AWS from 'aws-sdk'
-const sharp = require('sharp');
-const util = require('util');
+// @ts-ignore
+import sharp = require('sharp');
+import util = require('util');
 
 const handler = async function (event: any) {
     //@ts-ignore
