@@ -6,10 +6,11 @@
   },
   "scripts": {
     "build": "tsc",
+    "installFunctions": "cd src && npm install",
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk",
-    "deploy": "tsc && cdk bootstrap && cdk deploy"
+    "deploy": "cd src && npm install && cd .. && tsc && cdk bootstrap && cdk deploy"
   },
   "devDependencies": {
     "@aws-cdk/assert": "1.76.0",

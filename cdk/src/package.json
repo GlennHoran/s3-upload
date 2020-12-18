@@ -1,0 +1,14 @@
+{
+  "name": "functions",
+  "version": "1.0.0",
+  "description": "Need this so cdk deploy picks up external node dependencies",
+  "main": "getSignedUrl.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Glenn Horan",
+  "license": "ISC",
+  "dependencies": {
+    "sharp": "^0.26.3"
+  }
+}
