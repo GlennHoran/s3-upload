@@ -1,10 +1,12 @@
 import * as cdk from '@aws-cdk/core';
 import * as s3 from '@aws-cdk/aws-s3';
 import {Code, Function, Runtime, Tracing} from '@aws-cdk/aws-lambda';
-import { S3EventSource } from '@aws-cdk/aws-lambda-event-sources'
+import {S3EventSource} from '@aws-cdk/aws-lambda-event-sources'
 import {Cors, LambdaRestApi} from '@aws-cdk/aws-apigateway';
 import {ALL_METHODS} from "@aws-cdk/aws-apigateway/lib/util";
 import {EventType} from "@aws-cdk/aws-s3";
+import {CfnOutput} from "@aws-cdk/core";
+import {UserPool, UserPoolClient, CfnIdentityPool} from "@aws-cdk/aws-cognito";
 
 
 export class CdkStack extends cdk.Stack {
@@ -18,7 +20,7 @@ export class CdkStack extends cdk.Stack {
                     maxAge: 3000,
                     allowedOrigins: Cors.ALL_ORIGINS,
                     allowedHeaders: Cors.DEFAULT_HEADERS,
-                    allowedMethods: [ s3.HttpMethods.POST,
+                    allowedMethods: [s3.HttpMethods.POST,
                         s3.HttpMethods.PUT,
                         s3.HttpMethods.GET],
                 },
@@ -34,7 +36,7 @@ export class CdkStack extends cdk.Stack {
                     maxAge: 3000,
                     allowedOrigins: Cors.ALL_ORIGINS,
                     allowedHeaders: Cors.DEFAULT_HEADERS,
-                    allowedMethods: [ s3.HttpMethods.POST,
+                    allowedMethods: [s3.HttpMethods.POST,
                         s3.HttpMethods.PUT,
                         s3.HttpMethods.GET],
                 },
@@ -51,7 +53,7 @@ export class CdkStack extends cdk.Stack {
                 //this environment variable comes from the npm deploy script being run with npm_config_BUCKET being passed in.
                 environment: {
                     // @ts-ignore
-                    'BUCKET_NAME': process.env.npm_config_BUCKET_NAME
+                    'BUCKET_NAME': storageBucket.bucketName
                 }
             }
         );
@@ -63,7 +65,7 @@ export class CdkStack extends cdk.Stack {
                 tracing: Tracing.ACTIVE,
                 environment: {
                     // @ts-ignore
-                    'BUCKET_NAME': process.env.npm_config_BUCKET_NAME
+                    'BUCKET_NAME': storageBucket.bucketName
                 }
             }
         );
@@ -93,6 +95,37 @@ export class CdkStack extends cdk.Stack {
             events: [EventType.OBJECT_CREATED],
             filters: [{prefix: 'originals/'}]
         }))
+        const userPool = new UserPool(this, "UserPool", {
+            selfSignUpEnabled: true, // Allow users to sign up
+            autoVerify: { email: true }, // Verify email addresses by sending a verification code
+            signInAliases: { email: true }, // Set email as an alias
+        });
+
+        const userPoolClient = new UserPoolClient(this, "UserPoolClient", {
+            userPool,
+            generateSecret: false, // Don't need to generate secret for web app running on browsers
+        });
+
+        const identityPool = new CfnIdentityPool(this, "IdentityPool", {
+            allowUnauthenticatedIdentities: false, // Don't allow unathenticated users
+            cognitoIdentityProviders: [
+                {
+                    clientId: userPoolClient.userPoolClientId,
+                    providerName: userPool.userPoolProviderName,
+                },
+            ],
+        });
+
+        // Export values
+        new CfnOutput(this, "UserPoolId", {
+            value: userPool.userPoolId,
+        });
+        new CfnOutput(this, "UserPoolClientId", {
+            value: userPoolClient.userPoolClientId,
+        });
+        new CfnOutput(this, "IdentityPoolId", {
+            value: identityPool.ref,
+        });
     }
 }
 
