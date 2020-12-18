@@ -7,9 +7,7 @@ const handler = async function (event: any) {
     //@ts-ignore
     const bucketName: string = process.env['BUCKET_NAME'];
     const s3 = new AWS.S3({apiVersion: "2006-03-01"})
-    const payload = JSON.parse(event.body)
-    const httpMethod = event.httpMethod
-
+    console.log(event);
     // Read options from the event parameter.
     console.log("Reading options from event:\n", util.inspect(event, {depth: 5}));
     const bucket = bucketName
