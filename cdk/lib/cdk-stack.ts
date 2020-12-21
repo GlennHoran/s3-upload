@@ -6,6 +6,7 @@ import {Cors, LambdaRestApi} from '@aws-cdk/aws-apigateway';
 import {ALL_METHODS} from "@aws-cdk/aws-apigateway/lib/util";
 import {EventType} from "@aws-cdk/aws-s3";
 import {AllowedMethods, Distribution, ViewerProtocolPolicy} from '@aws-cdk/aws-cloudfront';
+import {Role, ServicePrincipal, ManagedPolicy} from '@aws-cdk/aws-iam'
 import * as origins from '@aws-cdk/aws-cloudfront-origins';
 
 
@@ -29,8 +30,6 @@ export class CdkStack extends cdk.Stack {
 
         const websiteBucket = new s3.Bucket(this, 'website-photo-upload', {
             versioned: true,
-            websiteIndexDocument: "index.html",
-            publicReadAccess: true,
             cors: [
                 {
                     maxAge: 3000,
@@ -69,12 +68,21 @@ export class CdkStack extends cdk.Stack {
                 }
             }
         );
+        //giving lambda access to bucket according to here: https://douglasduhaime.com/posts/s3-lambda-auth.html
+        const authLambdaRole = new Role(this, 'customRole', {
+            roleName: 'authLambdaRole',
+            assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
+            managedPolicies: [
+                ManagedPolicy.fromAwsManagedPolicyName("service-role/AWSLambdaExecute")
+            ]
+        })
 
         const authLambda = new Function(this, 'auth-lambda', {
                 runtime: Runtime.NODEJS_12_X,
                 code: Code.fromAsset('src'),
                 handler: 'authLambda.default',
                 tracing: Tracing.ACTIVE,
+                role: authLambdaRole,
                 environment: {
                     // @ts-ignore
                     'AUTH_USER': process.env.npm_config_AUTH_USERNAME,
@@ -102,6 +110,7 @@ export class CdkStack extends cdk.Stack {
                 allowedMethods: AllowedMethods.ALLOW_ALL,
                 viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
             },
+            defaultRootObject: "index.html"
         });
 
         //need to allow the lambda to read/write from the website. The lambda generates the
