@@ -5,7 +5,7 @@ import {S3EventSource} from '@aws-cdk/aws-lambda-event-sources'
 import {Cors, LambdaRestApi} from '@aws-cdk/aws-apigateway';
 import {ALL_METHODS} from "@aws-cdk/aws-apigateway/lib/util";
 import {EventType} from "@aws-cdk/aws-s3";
-import {AllowedMethods, Distribution, ViewerProtocolPolicy} from '@aws-cdk/aws-cloudfront';
+import {AllowedMethods, CachedMethods, Distribution, ViewerProtocolPolicy} from '@aws-cdk/aws-cloudfront';
 import {Role, ServicePrincipal, ManagedPolicy} from '@aws-cdk/aws-iam'
 import * as origins from '@aws-cdk/aws-cloudfront-origins';
 
@@ -73,7 +73,7 @@ export class CdkStack extends cdk.Stack {
             roleName: 'authLambdaRole',
             assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
             managedPolicies: [
-                ManagedPolicy.fromAwsManagedPolicyName("service-role/AWSLambdaExecute")
+                ManagedPolicy.fromAwsManagedPolicyName("AWSLambdaExecute")
             ]
         })
 
@@ -109,6 +109,7 @@ export class CdkStack extends cdk.Stack {
                 origin: new origins.S3Origin(websiteBucket),
                 allowedMethods: AllowedMethods.ALLOW_ALL,
                 viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+                cachedMethods: CachedMethods.CACHE_GET_HEAD_OPTIONS
             },
             defaultRootObject: "index.html"
         });
