@@ -70,6 +70,20 @@ export class CdkStack extends cdk.Stack {
             }
         );
 
+        const authLambda = new Function(this, 'auth-lambda', {
+                runtime: Runtime.NODEJS_12_X,
+                code: Code.fromAsset('src'),
+                handler: 'authLambda.default',
+                tracing: Tracing.ACTIVE,
+                environment: {
+                    // @ts-ignore
+                    'AUTH_USER': process.env.npm_config_AUTH_USERNAME,
+                    // @ts-ignore
+                    'AUTH_PASSWORD': process.env.npm_config_AUTH_PASSWORD
+                }
+            }
+        );
+
         //this construct should do all the plumbing for us - permissions to allow apigw to invoke the lambda +
         //all traffic routed to lambda regardless of path.
         const api = new LambdaRestApi(this, 'website-api', {
