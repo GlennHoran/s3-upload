@@ -5,8 +5,8 @@ import {S3EventSource} from '@aws-cdk/aws-lambda-event-sources'
 import {Cors, LambdaRestApi} from '@aws-cdk/aws-apigateway';
 import {ALL_METHODS} from "@aws-cdk/aws-apigateway/lib/util";
 import {EventType} from "@aws-cdk/aws-s3";
-import {CfnOutput} from "@aws-cdk/core";
-import {UserPool, UserPoolClient, CfnIdentityPool} from "@aws-cdk/aws-cognito";
+import {AllowedMethods, Distribution, ViewerProtocolPolicy} from '@aws-cdk/aws-cloudfront';
+import * as origins from '@aws-cdk/aws-cloudfront-origins';
 
 
 export class CdkStack extends cdk.Stack {
@@ -94,6 +94,15 @@ export class CdkStack extends cdk.Stack {
                 allowHeaders: Cors.DEFAULT_HEADERS,
             }
         })
+
+        const distribution = new Distribution(this, 'myDist', {
+            defaultBehavior: {
+                // @ts-ignore
+                origin: new origins.S3Origin(websiteBucket),
+                allowedMethods: AllowedMethods.ALLOW_ALL,
+                viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+            },
+        });
 
         //need to allow the lambda to read/write from the website. The lambda generates the
         // presigned URL so needs read/write permission
