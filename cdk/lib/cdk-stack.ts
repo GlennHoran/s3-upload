@@ -96,7 +96,7 @@ export class CdkStack extends cdk.Stack {
         //edge lambdas don't support environment variables... have to use aws parameter store
         const authLambda = new Function(this, 'auth-lambda', {
                 runtime: Runtime.NODEJS_12_X,
-                code: Code.fromAsset('src'),
+                code: Code.fromAsset('src', {exclude: ['node_modules']}),
                 handler: 'authLambda.default',
                 tracing: Tracing.ACTIVE,
                 role: authLambdaRole
