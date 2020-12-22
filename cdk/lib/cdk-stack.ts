@@ -99,13 +99,13 @@ export class CdkStack extends cdk.Stack {
                 code: Code.fromAsset('src'),
                 handler: 'authLambda.default',
                 tracing: Tracing.ACTIVE,
-                role: authLambdaRole,
-                environment: {
-                    // @ts-ignore
-                    'AUTH_USER': process.env.npm_config_AUTH_USERNAME,
-                    // @ts-ignore
-                    'AUTH_PASSWORD': process.env.npm_config_AUTH_PASSWORD
-                }
+                role: authLambdaRole
+                // environment: {
+                //     // @ts-ignore
+                //     'AUTH_USER': process.env.npm_config_AUTH_USERNAME,
+                //     // @ts-ignore
+                //     'AUTH_PASSWORD': process.env.npm_config_AUTH_PASSWORD
+                // }
             }
         );
 
