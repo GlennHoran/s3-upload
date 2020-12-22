@@ -1,10 +1,22 @@
 import * as AWS from 'aws-sdk'
 //@ts-ignore
 const handler = async function (event: any, context, callback) {
+
+    const AWS = require('aws-sdk');
+    const ssm = new AWS.SSM({region: 'us-east-1'});
+
+    const params = {
+        Names: ['photo-upload-user', 'photo-upload-password'], /* required */
+        WithDecryption: false
+    };
+    const parameters  = await ssm.getParameters(params).promise();
+    console.log(parameters)
+    console.log("after parameters")
+
     //@ts-ignore
-    const user: string = process.env['AUTH_USER']
+    const user: string = "user"
     //@ts-ignore
-    const password: string = process.env['AUTH_PASSWORD']
+    const password: string = "password"
     // Get the request and its headers
     const request = event.Records[0].cf.request;
     const headers = request.headers;

@@ -1,12 +1,18 @@
 import * as cdk from '@aws-cdk/core';
 import * as s3 from '@aws-cdk/aws-s3';
+import {EventType} from '@aws-cdk/aws-s3';
 import {Code, Function, Runtime, Tracing} from '@aws-cdk/aws-lambda';
 import {S3EventSource} from '@aws-cdk/aws-lambda-event-sources'
 import {Cors, LambdaRestApi} from '@aws-cdk/aws-apigateway';
 import {ALL_METHODS} from "@aws-cdk/aws-apigateway/lib/util";
-import {EventType} from "@aws-cdk/aws-s3";
-import {AllowedMethods, CachedMethods, Distribution, ViewerProtocolPolicy, LambdaEdgeEventType} from '@aws-cdk/aws-cloudfront';
-import {Role, ServicePrincipal, ManagedPolicy, CompositePrincipal} from '@aws-cdk/aws-iam'
+import {
+    AllowedMethods,
+    CachedMethods,
+    Distribution,
+    LambdaEdgeEventType,
+    ViewerProtocolPolicy
+} from '@aws-cdk/aws-cloudfront';
+import {CompositePrincipal, Effect, ManagedPolicy, PolicyStatement, Role, ServicePrincipal} from '@aws-cdk/aws-iam'
 import * as origins from '@aws-cdk/aws-cloudfront-origins';
 
 export class CdkStack extends cdk.Stack {
@@ -72,9 +78,22 @@ export class CdkStack extends cdk.Stack {
         const authLambdaRole = new Role(this, 'customRole', {
             roleName: 'authLambdaRole',
             assumedBy: new CompositePrincipal(new ServicePrincipal('lambda.amazonaws.com'), new ServicePrincipal('edgelambda.amazonaws.com')),
-            managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName("AWSLambdaExecute")]})
+            managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName("AWSLambdaExecute")],
+        })
+
+        //allow access to specific parameters in parameter store
+        const parameterStorePolicyStatement = new PolicyStatement({
+            effect: Effect.ALLOW,
+            resources: ['arn:aws:ssm:us-east-1:617840169292:parameter/photo-upload-user', 'arn:aws:ssm:us-east-1:617840169292:parameter/photo-upload-password' ],
+            actions: [
+                'ssm:GetParameters'
+            ]
+        })
+
+        authLambdaRole.addToPolicy(parameterStorePolicyStatement)
 
         // this is an Edge@Lambda function. Because I'm using US-east-1 I don't need to specify it as an Edge Func - https://docs.aws.amazon.com/cdk/api/latest/docs/aws-cloudfront-readme.html
+        //edge lambdas don't support environment variables... have to use aws parameter store
         const authLambda = new Function(this, 'auth-lambda', {
                 runtime: Runtime.NODEJS_12_X,
                 code: Code.fromAsset('src'),
