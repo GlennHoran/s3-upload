@@ -6,9 +6,8 @@ import {Cors, LambdaRestApi} from '@aws-cdk/aws-apigateway';
 import {ALL_METHODS} from "@aws-cdk/aws-apigateway/lib/util";
 import {EventType} from "@aws-cdk/aws-s3";
 import {AllowedMethods, CachedMethods, Distribution, ViewerProtocolPolicy} from '@aws-cdk/aws-cloudfront';
-import {Role, ServicePrincipal, ManagedPolicy} from '@aws-cdk/aws-iam'
+import {Role, ServicePrincipal, ManagedPolicy, CompositePrincipal} from '@aws-cdk/aws-iam'
 import * as origins from '@aws-cdk/aws-cloudfront-origins';
-
 
 export class CdkStack extends cdk.Stack {
     constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -68,14 +67,12 @@ export class CdkStack extends cdk.Stack {
                 }
             }
         );
+
         //giving lambda access to bucket according to here: https://douglasduhaime.com/posts/s3-lambda-auth.html
         const authLambdaRole = new Role(this, 'customRole', {
             roleName: 'authLambdaRole',
-            assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
-            managedPolicies: [
-                ManagedPolicy.fromAwsManagedPolicyName("AWSLambdaExecute")
-            ]
-        })
+            assumedBy: new CompositePrincipal(new ServicePrincipal('lambda.amazonaws.com'), new ServicePrincipal('edgelambda.amazonaws.com')),
+            managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName("AWSLambdaExecute")]})
 
         const authLambda = new Function(this, 'auth-lambda', {
                 runtime: Runtime.NODEJS_12_X,
