@@ -1,0 +1,6 @@
+List of gotchas I can remember:
+Lambda@edge doesn't support environment variables..
+Adding multiple principals to auth lambda role was a pain.
+Lambdas triggered by cloudfront have a size limit of 1048576 - needed to 'rejigger' imports
+Can't use encrypted parameter store parameters with CDK
+Lamdba@edge must be in us-east-1
