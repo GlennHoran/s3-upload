@@ -1,9 +1,7 @@
-import * as AWS from 'aws-sdk'
+import {SSM} from 'aws-sdk'
 //@ts-ignore
 const handler = async function (event: any, context, callback) {
-
-    const AWS = require('aws-sdk');
-    const ssm = new AWS.SSM({region: 'us-east-1'});
+    const ssm = new SSM({region: 'us-east-1'});
 
     const params = {
         Names: ['photo-upload-user', 'photo-upload-password'], /* required */
