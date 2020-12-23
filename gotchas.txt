@@ -1,3 +1,5 @@
+Gotchas, Learnings & Rationale
+
 List of gotchas I can remember:
 Lambda@edge doesn't support environment variables..
 Adding multiple principals to auth lambda role was a pain.
@@ -5,3 +7,8 @@ Lambdas triggered by cloudfront have a size limit of 1048576 - needed to 'rejigg
 With above - exclude is now depreciated... not sure how to resolve this.
 Can't use encrypted parameter store parameters with CDK
 Lamdba@edge must be in us-east-1
+
+Rationale:
+Presigned URL - no 6mb payload limit on lambda payloads (even an API gateway payload has a limit of 10mb).
+https://theburningmonk.com/2020/04/hit-the-6mb-lambda-payload-limit-heres-what-you-can-do/
+

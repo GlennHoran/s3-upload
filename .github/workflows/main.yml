@@ -31,6 +31,9 @@ jobs:
       - name: Run npm install & build website
         run: |
           npm install
+
+      - name: Build & sync websites
+        run: |
           cd photo-upload-website && npm run build
           cd ..
 

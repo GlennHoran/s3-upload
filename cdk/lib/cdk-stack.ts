@@ -34,7 +34,21 @@ export class CdkStack extends cdk.Stack {
             ],
         });
 
-        const websiteBucket = new s3.Bucket(this, 'website-photo-upload', {
+        const uploadWebpage = new s3.Bucket(this, 'website-photo-upload', {
+            versioned: true,
+            cors: [
+                {
+                    maxAge: 3000,
+                    allowedOrigins: Cors.ALL_ORIGINS,
+                    allowedHeaders: Cors.DEFAULT_HEADERS,
+                    allowedMethods: [s3.HttpMethods.POST,
+                        s3.HttpMethods.PUT,
+                        s3.HttpMethods.GET],
+                },
+            ],
+        });
+
+        const mainWebpage = new s3.Bucket(this, 'website-main', {
             versioned: true,
             cors: [
                 {
@@ -75,6 +89,18 @@ export class CdkStack extends cdk.Stack {
             }
         );
 
+        const s3ApiLambda = new Function(this, 's3-api-lambda', {
+                runtime: Runtime.NODEJS_12_X,
+                code: Code.fromAsset('src', {exclude: ['node_modules']}),
+                handler: 's3ApiLambda.default',
+                tracing: Tracing.ACTIVE,
+                environment: {
+                    // @ts-ignore
+                    'BUCKET_NAME': storageBucket.bucketName
+                }
+            }
+        );
+
         //giving lambda access to bucket according to here: https://douglasduhaime.com/posts/s3-lambda-auth.html
         const authLambdaRole = new Role(this, 'customRole', {
             roleName: 'authLambdaRole',
@@ -83,11 +109,10 @@ export class CdkStack extends cdk.Stack {
         })
 
 
-
         //allow access to specific parameters in parameter store
         const parameterStorePolicyStatement = new PolicyStatement({
             effect: Effect.ALLOW,
-            resources: ['arn:aws:ssm:us-east-1:617840169292:parameter/photo-upload-user', 'arn:aws:ssm:us-east-1:617840169292:parameter/photo-upload-password' ],
+            resources: ['arn:aws:ssm:us-east-1:617840169292:parameter/photo-upload-user', 'arn:aws:ssm:us-east-1:617840169292:parameter/photo-upload-password'],
             actions: [
                 'ssm:GetParameters'
             ]
@@ -102,6 +127,7 @@ export class CdkStack extends cdk.Stack {
                 'logs:PutLogEvents'
             ]
         })
+
 
         authLambdaRole.addToPolicy(parameterStorePolicyStatement)
         authLambdaRole.addToPolicy(edgeLambdaLoggingPolicyStatement)
@@ -138,16 +164,25 @@ export class CdkStack extends cdk.Stack {
         const distribution = new Distribution(this, 'myDist', {
             defaultBehavior: {
                 // @ts-ignore
-                origin: new origins.S3Origin(websiteBucket),
+                origin: new origins.S3Origin(mainWebpage),
                 allowedMethods: AllowedMethods.ALLOW_ALL,
                 viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
                 cachedMethods: CachedMethods.CACHE_GET_HEAD_OPTIONS,
-                edgeLambdas: [
-                    {
-                        functionVersion: authLambda.currentVersion,
-                        eventType: LambdaEdgeEventType.VIEWER_REQUEST,
-                    }
-                ],
+            },
+            additionalBehaviors: {
+                '/upload/*': {
+                    // @ts-ignore
+                    origin: new origins.S3Origin(uploadWebpage),
+                    allowedMethods: AllowedMethods.ALLOW_ALL,
+                    viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+                    cachedMethods: CachedMethods.CACHE_GET_HEAD_OPTIONS,
+                    edgeLambdas: [
+                        {
+                            functionVersion: authLambda.currentVersion,
+                            eventType: LambdaEdgeEventType.VIEWER_REQUEST,
+                        }
+                    ],
+                }
             },
             defaultRootObject: "index.html"
         });
@@ -177,7 +212,9 @@ export class CdkStack extends cdk.Stack {
         // @ts-ignore
         storageBucket.grantReadWrite(imageProcessorLambda)
         // @ts-ignore
-        websiteBucket.grantReadWrite(getSignedUrlLambda)
+        uploadWebpage.grantReadWrite(getSignedUrlLambda)
+        // @ts-ignore
+        mainWebpage.grantRead(s3ApiLambda)
         //adding event to trigger imageProcessor on image upload
         parameterStoreUserName.grantRead(authLambda)
         parameterStorePassword.grantRead(authLambda)
