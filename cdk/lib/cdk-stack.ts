@@ -165,6 +165,9 @@ export class CdkStack extends cdk.Stack {
         const uploadResource = api.root.addResource('upload')
         uploadResource.addMethod('POST', new LambdaIntegration(getSignedUrlLambda));
 
+        const s3ApiResource = api.root.addResource('s3-api')
+        uploadResource.addMethod('GET', new LambdaIntegration(s3ApiLambda));
+
 
         const distribution = new Distribution(this, 'myDist', {
             defaultBehavior: {
