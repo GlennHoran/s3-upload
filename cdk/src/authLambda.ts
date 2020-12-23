@@ -7,14 +7,25 @@ const handler = async function (event: any, context, callback) {
         Names: ['photo-upload-user', 'photo-upload-password'], /* required */
         WithDecryption: false
     };
+    var user: string = "user"
+    var password: string = "password"
     const parameters  = await ssm.getParameters(params).promise();
+    if (parameters.Parameters){
+        for (const i of parameters.Parameters) {
+            if (i.Name === 'photo-upload-user') {
+                if(i.Value){
+                    user = i.Value
+                }
+            }
+            if (i.Name === 'photo-upload-password') {
+                if(i.Value){
+                    password = i.Value
+                }
+            }
+        }
+    }
     console.log(parameters)
     console.log("after parameters")
-
-    //@ts-ignore
-    const user: string = "user"
-    //@ts-ignore
-    const password: string = "password"
     // Get the request and its headers
     const request = event.Records[0].cf.request;
     const headers = request.headers;

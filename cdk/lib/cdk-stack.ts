@@ -146,7 +146,6 @@ export class CdkStack extends cdk.Stack {
                     }
                 ],
             },
-
             defaultRootObject: "index.html"
         });
 
