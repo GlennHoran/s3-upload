@@ -46,7 +46,7 @@ jobs:
 
       - name: Copy files to the test website with the AWS CLI
         run: |
-          aws s3 sync photo-upload-website/dist ${{ secrets.BUCKET_ADDRESS_UPLOAD_WEBPAGE }} --delete
+          aws s3 sync photo-upload-website/dist ${{ secrets.BUCKET_ADDRESS_UPLOAD_WEBPAGE }}/upload --delete
           aws s3 sync website-main/dist ${{ secrets.BUCKET_ADDRESS_MAIN_WEBSITE }} --delete
 
       - name: CDK Deploy

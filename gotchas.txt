@@ -11,4 +11,6 @@ Lamdba@edge must be in us-east-1
 Rationale:
 Presigned URL - no 6mb payload limit on lambda payloads (even an API gateway payload has a limit of 10mb).
 https://theburningmonk.com/2020/04/hit-the-6mb-lambda-payload-limit-heres-what-you-can-do/
+https://medium.com/@zaccharles/s3-uploads-proxies-vs-presigned-urls-vs-presigned-posts-9661e2b37932
 
+Weird ass cloud front /path parameters = sent to bucket!

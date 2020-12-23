@@ -189,7 +189,7 @@ export class CdkStack extends cdk.Stack {
                             eventType: LambdaEdgeEventType.VIEWER_REQUEST,
                         }
                     ],
-                }
+                },
             },
             defaultRootObject: "index.html"
         });
