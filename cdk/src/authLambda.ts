@@ -2,13 +2,12 @@ import {SSM} from 'aws-sdk'
 //@ts-ignore
 const handler = async function (event: any, context, callback) {
     const ssm = new SSM({region: 'us-east-1'});
-
     const params = {
         Names: ['photo-upload-user', 'photo-upload-password'], /* required */
         WithDecryption: false
     };
-    var user: string = "user"
-    var password: string = "password"
+    var user: string = ""
+    var password: string = ""
     const parameters  = await ssm.getParameters(params).promise();
     if (parameters.Parameters){
         for (const i of parameters.Parameters) {

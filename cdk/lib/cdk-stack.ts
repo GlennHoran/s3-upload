@@ -3,6 +3,7 @@ import * as s3 from '@aws-cdk/aws-s3';
 import {EventType} from '@aws-cdk/aws-s3';
 import {Code, Function, Runtime, Tracing} from '@aws-cdk/aws-lambda';
 import {S3EventSource} from '@aws-cdk/aws-lambda-event-sources'
+import {ParameterTier, StringParameter} from "@aws-cdk/aws-ssm";
 import {Cors, LambdaRestApi} from '@aws-cdk/aws-apigateway';
 import {ALL_METHODS} from "@aws-cdk/aws-apigateway/lib/util";
 import {
@@ -81,6 +82,8 @@ export class CdkStack extends cdk.Stack {
             managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName("AWSLambdaExecute")],
         })
 
+
+
         //allow access to specific parameters in parameter store
         const parameterStorePolicyStatement = new PolicyStatement({
             effect: Effect.ALLOW,
@@ -149,6 +152,24 @@ export class CdkStack extends cdk.Stack {
             defaultRootObject: "index.html"
         });
 
+        const parameterStoreUserName = new StringParameter(this, 'userName', {
+            allowedPattern: '.*',
+            description: 'Username for photo-upload',
+            parameterName: 'photo-upload-user',
+            // @ts-ignore
+            stringValue: process.env.npm_config_AUTH_USERNAME,
+            tier: ParameterTier.ADVANCED,
+        })
+
+        const parameterStorePassword = new StringParameter(this, 'notAPassword', {
+            allowedPattern: '.*',
+            description: 'Password for photo-upload',
+            parameterName: 'photo-upload-password',
+            // @ts-ignore
+            stringValue: process.env.npm_config_AUTH_PASSWORD,
+            tier: ParameterTier.ADVANCED,
+        })
+
         //need to allow the lambda to read/write from the website. The lambda generates the
         // presigned URL so needs read/write permission
         // @ts-ignore
@@ -158,6 +179,8 @@ export class CdkStack extends cdk.Stack {
         // @ts-ignore
         websiteBucket.grantReadWrite(getSignedUrlLambda)
         //adding event to trigger imageProcessor on image upload
+        parameterStoreUserName.grantRead(authLambda)
+        parameterStorePassword.grantRead(authLambda)
         // @ts-ignore
         const eventSource = imageProcessorLambda.addEventSource(new S3EventSource(storageBucket, {
             events: [EventType.OBJECT_CREATED],
