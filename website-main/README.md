@@ -53,3 +53,14 @@ With Parcel's `--public-url` flag, use the following scripts for deployment:
 ```
 
 Then follow the normal procedure in GitHub Pages and select the `gh-pages` branch.
+
+To recreate this project and have everything working you will need to set the following Secrets in github actions:
+
+1. AWS_KEY - your AWS key... I've just used admin creds to have access to everything, but you could probably cut it down 
+by just making a role with CDK permissions and CLI permissions. 
+2. AWS_SECRET - the secret for the above key these are both used in the set AWS credentials step on github actions. 
+3. BUCKET_ADDRESS_UPLOAD_WEBPAGE - the bucket address (s3//YOURBUCKETNAME) for the website bucket you are hosting the 
+upload photos page. You can get this from the AWS console once your CDK stack has deployed for the first time
+4. BUCKET_ADDRESS_MAIN_WEBPAGE - the bucket address for the main website bucket. 
+5. AUTH_USERNAME - the username you want to set to access the upload photos page 
+6. AUTH_PASSWORD - the password you want to set to access the upload photos page 
