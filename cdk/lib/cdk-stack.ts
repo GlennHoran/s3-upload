@@ -4,7 +4,7 @@ import {EventType} from '@aws-cdk/aws-s3';
 import {Code, Function, Runtime, Tracing} from '@aws-cdk/aws-lambda';
 import {S3EventSource} from '@aws-cdk/aws-lambda-event-sources'
 import {ParameterTier, StringParameter} from "@aws-cdk/aws-ssm";
-import {Cors, LambdaRestApi} from '@aws-cdk/aws-apigateway';
+import {Cors, LambdaRestApi, HttpIntegration, LambdaIntegration} from '@aws-cdk/aws-apigateway';
 import {ALL_METHODS} from "@aws-cdk/aws-apigateway/lib/util";
 import {
     AllowedMethods,
@@ -153,13 +153,18 @@ export class CdkStack extends cdk.Stack {
         //this construct should do all the plumbing for us - permissions to allow apigw to invoke the lambda +
         //all traffic routed to lambda regardless of path.
         const api = new LambdaRestApi(this, 'website-api', {
+            proxy: false,
             handler: getSignedUrlLambda,
             defaultCorsPreflightOptions: {
                 allowOrigins: Cors.ALL_ORIGINS,
                 allowMethods: ALL_METHODS,
                 allowHeaders: Cors.DEFAULT_HEADERS,
-            }
+            },
         })
+
+        const uploadResource = api.root.addResource('upload')
+        uploadResource.addMethod('POST', new LambdaIntegration(getSignedUrlLambda));
+
 
         const distribution = new Distribution(this, 'myDist', {
             defaultBehavior: {

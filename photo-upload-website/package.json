@@ -5,7 +5,7 @@
   "scripts": {
     "start": "parcel index.html",
     "build": "parcel build index.html",
-    "deploy": "npm install && npm run build && aws s3 sync ./dist s3//website --delete"
+    "deploy": "npm install && npm run build"
   },
   "license": "MIT",
   "dependencies": {

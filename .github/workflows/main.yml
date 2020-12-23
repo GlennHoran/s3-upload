@@ -26,16 +26,18 @@ jobs:
         with:
           node-version: 12.19.0
         env:
-          BUCKET: ${{ secrets.BUCKET_ADDRESS }}
+          BUCKET: ${{ secrets.BUCKET_ADDRESS_UPLOAD_WEBPAGE }}
 
       - name: Run npm install & build website
         run: |
           npm install
 
-      - name: Build & sync websites
+      - name: Build websites
         run: |
-          cd photo-upload-website && npm run build
-          cd ..
+          cd photo-upload-website && npm run build && cd ..
+
+          cd website-main && npm run build && cd ..
+          cd..
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -45,7 +47,9 @@ jobs:
           aws-region: us-east-1
 
       - name: Copy files to the test website with the AWS CLI
-        run: aws s3 sync photo-upload-website/dist ${{ secrets.BUCKET_ADDRESS }} --delete
+        run: |
+          aws s3 sync photo-upload-website/dist ${{ secrets.BUCKET_ADDRESS_UPLOAD_WEBPAGE }} --delete
+          aws s3 sync website-main/dist ${{ secrets.BUCKET_ADDRESS_MAIN_WEBSITE }} --delete
 
       - name: CDK Deploy
         run: |
