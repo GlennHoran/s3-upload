@@ -90,7 +90,19 @@ export class CdkStack extends cdk.Stack {
             ]
         })
 
+        const edgeLambdaLoggingPolicyStatement = new PolicyStatement({
+            effect: Effect.ALLOW,
+            resources: ['arn:aws:logs:*:*:*'],
+            actions: [
+                'logs:CreateLogGroup',
+                'logs:CreateLogStream',
+                'logs:PutLogEvents'
+            ]
+        })
+
         authLambdaRole.addToPolicy(parameterStorePolicyStatement)
+        authLambdaRole.addToPolicy(edgeLambdaLoggingPolicyStatement)
+
 
         // this is an Edge@Lambda function. Because I'm using US-east-1 I don't need to specify it as an Edge Func - https://docs.aws.amazon.com/cdk/api/latest/docs/aws-cloudfront-readme.html
         //edge lambdas don't support environment variables... have to use aws parameter store
