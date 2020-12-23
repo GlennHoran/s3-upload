@@ -197,7 +197,7 @@ export class CdkStack extends cdk.Stack {
         const distribution = new Distribution(this, 'myDist', {
             defaultBehavior: {
                 // @ts-ignore
-                origin: new origins.S3Origin(websiteBucket),
+                origin: new origins.S3Origin(uploadWebpage),
                 allowedMethods: AllowedMethods.ALLOW_ALL,
                 viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
                 cachedMethods: CachedMethods.CACHE_GET_HEAD_OPTIONS,
