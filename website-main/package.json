@@ -7,7 +7,7 @@
     "build": "parcel build index.html --public-url /website",
     "build-local": "parcel build index.html",
     "deploy-local": "npm install && npm run build",
-    "deploy": "npm install && npm run build --out-dir /website "
+    "deploy": "npm install && npm run build"
   },
   "license": "MIT",
   "dependencies": {
