@@ -101,14 +101,14 @@ export class CdkStack extends cdk.Stack {
             }
         );
 
-        const redirectLambdaRole = new Role(this, 'customRole', {
+        const redirectLambdaRole = new Role(this, 'redirectLambdaRole', {
             roleName: 'redirectLambdaRole',
             assumedBy: new CompositePrincipal(new ServicePrincipal('lambda.amazonaws.com'), new ServicePrincipal('edgelambda.amazonaws.com')),
             managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName("AWSLambdaExecute")],
         })
 
         //giving lambda access to bucket according to here: https://douglasduhaime.com/posts/s3-lambda-auth.html
-        const authLambdaRole = new Role(this, 'customRole', {
+        const authLambdaRole = new Role(this, 'authLambdaRole', {
             roleName: 'authLambdaRole',
             assumedBy: new CompositePrincipal(new ServicePrincipal('lambda.amazonaws.com'), new ServicePrincipal('edgelambda.amazonaws.com')),
             managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName("AWSLambdaExecute")],
