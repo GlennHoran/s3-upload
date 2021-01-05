@@ -171,24 +171,24 @@ export class CdkStack extends cdk.Stack {
         const distribution = new Distribution(this, 'myDist', {
             defaultBehavior: {
                 // @ts-ignore
-                origin: new origins.S3Origin(mainWebpage),
+                origin: new origins.S3Origin(uploadWebpage),
                 allowedMethods: AllowedMethods.ALLOW_ALL,
                 viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
                 cachedMethods: CachedMethods.CACHE_GET_HEAD_OPTIONS,
+                edgeLambdas: [
+                    {
+                        functionVersion: authLambda.currentVersion,
+                        eventType: LambdaEdgeEventType.VIEWER_REQUEST,
+                    }
+                ],
             },
             additionalBehaviors: {
-                'upload/*': {
+                'website/*': {
                     // @ts-ignore
-                    origin: new origins.S3Origin(uploadWebpage),
+                    origin: new origins.S3Origin(mainWebpage),
                     allowedMethods: AllowedMethods.ALLOW_ALL,
                     viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
                     cachedMethods: CachedMethods.CACHE_GET_HEAD_OPTIONS,
-                    edgeLambdas: [
-                        {
-                            functionVersion: authLambda.currentVersion,
-                            eventType: LambdaEdgeEventType.VIEWER_REQUEST,
-                        }
-                    ],
                 },
             },
             defaultRootObject: "index.html"

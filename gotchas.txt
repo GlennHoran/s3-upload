@@ -14,3 +14,11 @@ https://theburningmonk.com/2020/04/hit-the-6mb-lambda-payload-limit-heres-what-y
 https://medium.com/@zaccharles/s3-uploads-proxies-vs-presigned-urls-vs-presigned-posts-9661e2b37932
 
 Weird ass cloud front /path parameters = sent to bucket!
+
+https://vimalpaliwal.com/blog/2018/10/10f435c29f/serving-multiple-s3-buckets-via-single-aws-cloudfront-distribution.html
+
+Look up how to use edge lambda to remove file path from request - i,e if I have a path param for cloudfront that looks like:
+http://cloudfrontURL/uploads
+that redirects to a bucket, then the bucket NEEDS to have that uploads folder in it.
+i.e s3//bucketName/uploads/index.html
+WHY
