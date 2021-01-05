@@ -4,8 +4,10 @@
   "description": "",
   "scripts": {
     "start": "parcel index.html",
-    "build": "parcel build index.html",
-    "deploy": "npm install && npm run build"
+    "build": "parcel build index.html --public-url /website",
+    "build-local": "parcel build index.html",
+    "deploy-local": "npm install && npm run build",
+    "deploy": "npm install && npm run build --out-dir /website "
   },
   "license": "MIT",
   "dependencies": {

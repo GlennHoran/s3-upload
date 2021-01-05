@@ -183,13 +183,13 @@ export class CdkStack extends cdk.Stack {
                     origin: new origins.S3Origin(mainWebpage),
                     allowedMethods: AllowedMethods.ALLOW_ALL,
                     viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-                    cachedMethods: CachedMethods.CACHE_GET_HEAD_OPTIONS,
-                    edgeLambdas: [
-                        {
-                            functionVersion: redirectLambda.currentVersion,
-                            eventType: LambdaEdgeEventType.ORIGIN_REQUEST,
-                        }
-                    ]
+                    cachedMethods: CachedMethods.CACHE_GET_HEAD_OPTIONS
+                    // edgeLambdas: [
+                    //     {
+                    //         functionVersion: redirectLambda.currentVersion,
+                    //         eventType: LambdaEdgeEventType.ORIGIN_REQUEST,
+                    //     }
+                    // ]
                 },
             },
             defaultRootObject: "index.html"

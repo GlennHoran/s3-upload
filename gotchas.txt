@@ -22,3 +22,5 @@ http://cloudfrontURL/uploads
 that redirects to a bucket, then the bucket NEEDS to have that uploads folder in it.
 i.e s3//bucketName/uploads/index.html
 WHY
+
+--metadata-directive REPLACE --cache-control max-age=0 (add this when deploying out index.html for testing website to stop cloudfront caching)
