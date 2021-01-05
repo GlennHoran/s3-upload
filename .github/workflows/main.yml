@@ -14,7 +14,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   deploy:
-    name: Upload to Amazon S3
+    name: Deploy website changes to S3 & Deploy CDK stack
     runs-on: ubuntu-latest
 
     steps:

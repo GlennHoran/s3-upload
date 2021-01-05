@@ -3,7 +3,7 @@ const handler = (event, context, callback) => {
     const request = event.Records[0].cf.request;
     const uri = request.uri
     const index = uri.indexOf("/website")
-    const updatedDomain = uri.slice(0, index);
+    const updatedDomain = uri.slice(0, index) + '/index.html';
     /**
      * Reads query string to check if custom origin should be used, and
      * if true, sets custom origin properties.
