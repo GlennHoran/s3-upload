@@ -101,13 +101,18 @@ export class CdkStack extends cdk.Stack {
             }
         );
 
+        const redirectLambdaRole = new Role(this, 'customRole', {
+            roleName: 'redirectLambdaRole',
+            assumedBy: new CompositePrincipal(new ServicePrincipal('lambda.amazonaws.com'), new ServicePrincipal('edgelambda.amazonaws.com')),
+            managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName("AWSLambdaExecute")],
+        })
+
         //giving lambda access to bucket according to here: https://douglasduhaime.com/posts/s3-lambda-auth.html
         const authLambdaRole = new Role(this, 'customRole', {
             roleName: 'authLambdaRole',
             assumedBy: new CompositePrincipal(new ServicePrincipal('lambda.amazonaws.com'), new ServicePrincipal('edgelambda.amazonaws.com')),
             managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName("AWSLambdaExecute")],
         })
-
 
         //allow access to specific parameters in parameter store
         const parameterStorePolicyStatement = new PolicyStatement({
@@ -118,20 +123,7 @@ export class CdkStack extends cdk.Stack {
             ]
         })
 
-        const edgeLambdaLoggingPolicyStatement = new PolicyStatement({
-            effect: Effect.ALLOW,
-            resources: ['arn:aws:logs:*:*:*'],
-            actions: [
-                'logs:CreateLogGroup',
-                'logs:CreateLogStream',
-                'logs:PutLogEvents'
-            ]
-        })
-
-
         authLambdaRole.addToPolicy(parameterStorePolicyStatement)
-        authLambdaRole.addToPolicy(edgeLambdaLoggingPolicyStatement)
-
 
         // this is an Edge@Lambda function. Because I'm using US-east-1 I don't need to specify it as an Edge Func - https://docs.aws.amazon.com/cdk/api/latest/docs/aws-cloudfront-readme.html
         //edge lambdas don't support environment variables... have to use aws parameter store
@@ -141,12 +133,15 @@ export class CdkStack extends cdk.Stack {
                 handler: 'authLambda.default',
                 tracing: Tracing.ACTIVE,
                 role: authLambdaRole
-                // environment: {
-                //     // @ts-ignore
-                //     'AUTH_USER': process.env.npm_config_AUTH_USERNAME,
-                //     // @ts-ignore
-                //     'AUTH_PASSWORD': process.env.npm_config_AUTH_PASSWORD
-                // }
+            }
+        );
+
+        const redirectLambda = new Function(this, 'redirect-lambda', {
+                runtime: Runtime.NODEJS_12_X,
+                code: Code.fromAsset('src', {exclude: ['node_modules']}),
+                handler: 'redirectLambda.default',
+                tracing: Tracing.ACTIVE,
+                role: redirectLambdaRole
             }
         );
 
@@ -189,6 +184,12 @@ export class CdkStack extends cdk.Stack {
                     allowedMethods: AllowedMethods.ALLOW_ALL,
                     viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
                     cachedMethods: CachedMethods.CACHE_GET_HEAD_OPTIONS,
+                    edgeLambdas: [
+                        {
+                            functionVersion: redirectLambda.currentVersion,
+                            eventType: LambdaEdgeEventType.ORIGIN_REQUEST,
+                        }
+                    ]
                 },
             },
             defaultRootObject: "index.html"
