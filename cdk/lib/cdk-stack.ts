@@ -161,7 +161,7 @@ export class CdkStack extends cdk.Stack {
         uploadResource.addMethod('POST', new LambdaIntegration(getSignedUrlLambda));
 
         const s3ApiResource = api.root.addResource('s3-api')
-        uploadResource.addMethod('GET', new LambdaIntegration(s3ApiLambda));
+        s3ApiResource.addMethod('GET', new LambdaIntegration(s3ApiLambda));
 
         const distribution = new Distribution(this, 'myDist', {
             defaultBehavior: {
@@ -184,33 +184,10 @@ export class CdkStack extends cdk.Stack {
                     allowedMethods: AllowedMethods.ALLOW_ALL,
                     viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
                     cachedMethods: CachedMethods.CACHE_GET_HEAD_OPTIONS
-                    // edgeLambdas: [
-                    //     {
-                    //         functionVersion: redirectLambda.currentVersion,
-                    //         eventType: LambdaEdgeEventType.ORIGIN_REQUEST,
-                    //     }
-                    // ]
                 },
             },
             defaultRootObject: "index.html"
         });
-
-        // const distribution = new Distribution(this, 'myDist', {
-        //     defaultBehavior: {
-        //         // @ts-ignore
-        //         origin: new origins.S3Origin(uploadWebpage),
-        //         allowedMethods: AllowedMethods.ALLOW_ALL,
-        //         viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-        //         cachedMethods: CachedMethods.CACHE_GET_HEAD_OPTIONS,
-        //         edgeLambdas: [
-        //             {
-        //                 functionVersion: authLambda.currentVersion,
-        //                 eventType: LambdaEdgeEventType.VIEWER_REQUEST,
-        //             }
-        //         ],
-        //     },
-        //     defaultRootObject: "index.html"
-        // });
 
         const parameterStoreUserName = new StringParameter(this, 'userName', {
             allowedPattern: '.*',
@@ -242,7 +219,7 @@ export class CdkStack extends cdk.Stack {
         uploadWebpage.grantReadWrite(getSignedUrlLambda)
 
         // @ts-ignore
-        s3ApiLambda.grantInvoke(api)
+        // s3ApiLambda.grantInvoke(api)
         // @ts-ignore
         mainWebpage.grantRead(s3ApiLambda)
         //adding event to trigger imageProcessor on image upload
