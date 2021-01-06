@@ -237,6 +237,8 @@ export class CdkStack extends cdk.Stack {
         // @ts-ignore
         storageBucket.grantReadWrite(imageProcessorLambda)
         // @ts-ignore
+        storageBucket.grantReadWrite(getSignedUrlLambda)
+        // @ts-ignore
         uploadWebpage.grantReadWrite(getSignedUrlLambda)
         // @ts-ignore
         mainWebpage.grantRead(s3ApiLambda)
