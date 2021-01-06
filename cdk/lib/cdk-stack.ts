@@ -240,6 +240,9 @@ export class CdkStack extends cdk.Stack {
         storageBucket.grantReadWrite(getSignedUrlLambda)
         // @ts-ignore
         uploadWebpage.grantReadWrite(getSignedUrlLambda)
+
+        // @ts-ignore
+        s3ApiLambda.grantInvoke(api)
         // @ts-ignore
         mainWebpage.grantRead(s3ApiLambda)
         //adding event to trigger imageProcessor on image upload
