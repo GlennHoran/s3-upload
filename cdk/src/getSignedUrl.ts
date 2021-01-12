@@ -25,6 +25,7 @@ const handler = async function (event: any) {
             Bucket: bucketName,
             Key: payload.fileName,
             Expires: signedUrlExpiresSeconds,
+            ResponseContentType: getImageType(payload.fileName)
         }
     }
     try {
@@ -39,6 +40,14 @@ const handler = async function (event: any) {
         return {error: 'An unexpected error occured during password change.'}
     }
 };
+
+function getImageType(fileName: string){
+    if (fileName.includes("png")){
+        return "image/png"
+    } else {
+        return "image/jpeg"
+    }
+}
 
 const sendRes = (status: number, body: string) => {
     return {

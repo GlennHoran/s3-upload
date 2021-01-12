@@ -1,13 +1,12 @@
 import React, {useState} from 'react'
 import PhotoCard from "./PhotoCard";
 import {getObjectFromS3, listObjectsFromS3} from "../service/FileService"
-import {getPreSignedUrl} from "../../../photo-upload-website/src/service/axiosService";
 
 export default () => {
 
     const [listOfFiles, setListOfFiles] = useState([]);
     const [fileName, setFileName] = useState("");
-    const [base64Data, setBase64Data] = useState([]);
+    const [imageData, setImageData] = useState([]);
 
 
     async function getPhotos() {
@@ -17,8 +16,7 @@ export default () => {
     }
 
     async function getData(fileName) {
-        const fileData = await getObjectFromS3(fileName)
-        return fileData
+        return await getObjectFromS3(fileName)
     }
 
     async function getImages(){
@@ -28,7 +26,7 @@ export default () => {
                 }
             })
         Promise.all(promiseArray).then((values) => {
-            setBase64Data(values)
+            setImageData(values)
         })
     }
 
@@ -40,9 +38,9 @@ export default () => {
                     {file}
                 </div>
         }})}
-        {base64Data.map(data => {
+        {imageData.map(data => {
             if(data !== undefined){
-                return <PhotoCard data={data} fileName = ""/>
+                return <PhotoCard data={data.base64} fileName = {data.fileName}/>
             }
         })}
         <button onClick={() => getPhotos()}> listFiles</button>

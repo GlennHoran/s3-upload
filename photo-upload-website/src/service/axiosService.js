@@ -6,8 +6,7 @@ const apiGatewayUrl = "https://wp0r948d32.execute-api.us-east-1.amazonaws.com/pr
 export const getPreSignedUrl = (fileName, urlTypeRequested) => axios.post(apiGatewayUrl + '/upload', {
         fileName: fileName,
         urlTypeRequested: urlTypeRequested
-}
-).then(function (response) {
+}).then(function (response) {
         console.log(response.data)
         return response.data;
     })

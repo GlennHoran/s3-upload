@@ -18,10 +18,8 @@ export const getObjectFromS3 = (key) => axios.get(apiGatewayUrl, {
     }
 }).then(
      (response) => {
-
-        console.log(`Response: ${JSON.stringify(response.data.Body.data)}`)
-        console.log(`base64: ${encode(response.data.Body.data)}`)
-        return encode(response.data.Body.data)
+         console.log({fileName: key, base64: encode(response.data.Body.data)})
+        return {fileName: key, base64: encode(response.data.Body.data)}
     }
 ).catch(function (error){
         console.log(error.toString())
