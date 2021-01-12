@@ -41,7 +41,9 @@ export default () => {
                 </div>
         }})}
         {base64Data.map(data => {
-            return <PhotoCard data={data} fileName = ""/>
+            if(data !== undefined){
+                return <PhotoCard data={data} fileName = ""/>
+            }
         })}
         <button onClick={() => getPhotos()}> listFiles</button>
         <button onClick={() => getImages()}>getImages</button>
