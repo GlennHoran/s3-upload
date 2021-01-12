@@ -24,13 +24,6 @@ const FileUpload = props => {
         setStatus(status)
     }
 
-    async function getImage() {
-        setStatus("Fetching presigned URL ")
-        let url = await getPreSignedUrl(input, "download")
-        setStatus("Image URL retrieved")
-        setImageUrl(url)
-    }
-
     function handleUpload(event) {
         setFile(event.target.files[0]);
     }

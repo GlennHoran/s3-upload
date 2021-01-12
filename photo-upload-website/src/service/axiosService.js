@@ -1,5 +1,4 @@
 import axios from "axios";
-import {formatUrl} from "../util";
 
 const apiGatewayUrl = "https://wp0r948d32.execute-api.us-east-1.amazonaws.com/prod"
 
@@ -10,7 +9,7 @@ export const getPreSignedUrl = (fileName, urlTypeRequested) => axios.post(apiGat
 }
 ).then(function (response) {
         console.log(response.data)
-        return formatUrl(response.data);
+        return response.data;
     })
     .catch(function (error) {
         console.log("something went wrong: ", error);
