@@ -37,7 +37,7 @@ const handler = async function (event: any) {
         return sendRes(200, `${preSignedUrl}`);
     } catch (e) {
         console.log(e)
-        return {error: 'An unexpected error occured during password change.'}
+        return {error: 'An unexpected error occurred during password change.'}
     }
 };
 

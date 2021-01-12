@@ -3,6 +3,7 @@ import * as AWS from 'aws-sdk'
 import sharp = require('sharp');
 import util = require('util');
 
+//https://docs.aws.amazon.com/lambda/latest/dg/with-s3-example.html
 const handler = async function (event: any) {
     //@ts-ignore
     const bucketName: string = process.env['BUCKET_NAME'];
@@ -37,7 +38,7 @@ const handler = async function (event: any) {
         };
         var originalImage = await s3.getObject(params).promise();
     } catch (error) {
-        console.log(error);
+        console.log("error with s3.getObject: " + error);
         return;
     }
 
@@ -48,7 +49,7 @@ const handler = async function (event: any) {
     try {
         var buffer = await sharp(originalImage.Body).resize(width).toBuffer();
     } catch (error) {
-        console.log(error);
+        console.log("error with sharp : " + error);
         return;
     }
     const newKey = srcKey.replace('originals','thumbnails')
@@ -62,7 +63,7 @@ const handler = async function (event: any) {
         };
         const putResult = await s3.putObject(thumbnailParams).promise();
     } catch (error) {
-        console.log(error);
+        console.log("error with putObject: " + error);
         return;
     }
 
