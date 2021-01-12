@@ -27,7 +27,7 @@ export default () => {
                     return getData(file)
                 }
             })
-        return Promise.all(promiseArray).then((values) => {
+        Promise.all(promiseArray).then((values) => {
             setBase64Data(values)
         })
     }
