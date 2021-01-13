@@ -4,7 +4,7 @@ import FileUpload from "./components/FileUpload";
 
 export default () => (
   <div>
-    <h1>Welcome to this S3 file upload boi A minor change!</h1>
+    <h1>Welcome to this S3 file upload boi!</h1>
     <FileUpload/>
       <FilePreview/>
   </div>
