@@ -32,7 +32,6 @@ export default () => {
     }
 
     return <div className="body-container">
-        <div>This is the body</div>
         {listOfFiles.map(file => {
             if(file.includes("thumbnails")){
                 return <div>
