@@ -16,7 +16,3 @@ html, body {
 .content {
     flex: 1 0 auto;
 }
-
-.container {
-    background-color: blue;
-}
