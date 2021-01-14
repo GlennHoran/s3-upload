@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import PhotoCard from "./PhotoCard";
 import {getObjectFromS3, listObjectsFromS3} from "../service/FileService"
+import "../css/body.css"
 
 export default () => {
 
@@ -38,11 +39,13 @@ export default () => {
                     {file}
                 </div>
         }})}
+        <div className = "images-container3" style={{display: "flex", flexWrap: "wrap"}}>
         {imageData.map(data => {
             if(data !== undefined){
                 return <PhotoCard data={data.base64} fileName = {data.fileName}/>
             }
         })}
+        </div>
         <button onClick={() => getPhotos()}> listFiles</button>
         <button onClick={() => getImages()}>getImages</button>
     </div>

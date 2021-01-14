@@ -1,0 +1,22 @@
+.app {
+    font-family: 'Open Sans', sans-serif;
+    /*3 lines before are for sticky footer*/
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/*This allows for containers to go right to edge of the screen*/
+html, body {
+    margin:0;
+    padding:0;
+}
+
+/*more sticky footer*/
+.content {
+    flex: 1 0 auto;
+}
+
+.container {
+    background-color: blue;
+}

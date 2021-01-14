@@ -2,6 +2,7 @@ import React from "react";
 import Footer from './footerComponents/FooterContainer'
 import Body from './bodyComponents/BodyContainer'
 import Header from './headerComponents/HeaderContainer'
+import './app.css'
 
 
 export default () => (

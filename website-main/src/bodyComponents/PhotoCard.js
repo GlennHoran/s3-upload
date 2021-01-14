@@ -15,10 +15,9 @@ export default (props) => {
         return fileName.replace("thumbnails", "originals")
     }
 
-    return <div>
+    return <div style = {{padding: "1em"}}>
         <div onClick={() => getOriginalImage(props.fileName)}>
             <img src={"data:image/jpeg;base64, " + props.data} alt={props.fileName} />
-            {props.fileName}
         </div>
 
     </div>
